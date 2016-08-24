@@ -18,3 +18,5 @@ print("Added this line from laptop")
 print("pulled to desktop from web")
 print("added one more line from desktop")
 print("edited from b")
+print("merge conflict solved by pulling and editing")
+
