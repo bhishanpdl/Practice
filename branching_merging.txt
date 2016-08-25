@@ -45,8 +45,7 @@ git branch -D branch1
 
 gb b2
 gco b2
-gall    # add all  # now we are editing from branch
-
+gall 
 
 
 
