@@ -1,0 +1,53 @@
+# Author    : Bhishan Poudel
+# Date      : Aug 24, 2016
+
+branching and merging in git
+##======================================================================
+
+1. create the branch
+git branch branch1
+
+2. checkout to that branch
+git checkout branch1
+
+3. add all files to the branch
+
+git add --all
+
+4. create new file in the branch
+echo hello > newfile.txt
+
+5. switch to master
+git checkout master
+
+note: now master doesnot have this file, so text editor will 
+      show error that the file does not exists!
+      
+6. go back to branch1
+git checkout branch1
+
+check in which branch i am: 
+git branch  # * will show the current branch
+
+7. before merging push to the branch :  gpsb
+git add .
+git commit -m "changes made"
+git push origin branch1
+
+8. merge branch1 into master
+git merge branch1
+
+9. delete the branch1
+git branch -D branch1
+
+##======================================================================
+# change only the file
+
+gb b2
+gco b2
+gall    # add all  # now we are editing from branch
+
+
+
+
+
