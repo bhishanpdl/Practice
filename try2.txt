@@ -6,3 +6,11 @@ cmd shift b is add-all.
 cmd shift c is commit.
 cmd shift p for push.
 cmd shift u is diff
+
+# git plus diff
+'.platform-darwin':
+  'shift-cmd-u': 'git-plus:diff'
+
+  #  git plus add one
+  '.platform-darwin atom-text-editor':
+    'shift-cmd-b': 'git-plus:add-all'
