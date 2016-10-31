@@ -10,3 +10,6 @@ Then, to push I don't have shortcut.
 Go to pallette (cmd shift p  or F6 i have changed to F6)
 type git push, then hit enter.
 I have already set password and username in simplici so it will easily push it.
+We will see green buttom showing pushing.
+Now go to remote browser and refresh the file, you will see the changes.
+Edited again.
