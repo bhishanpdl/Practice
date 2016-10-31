@@ -1,21 +1,8 @@
-this is a trial of using git hub using gitplus in atom editor.
-It we edited the file we will see the color change to brown in the git repo
-in the left hand side pane.
-Type cmd shift a to add file.
-We will see green notificaiton from git plus that the file has been added.
-To commit cmd sht c.
-In the bottom right we also see number of lines added and deleted.
-Then type on the commit section and save it.
-Then, to push I don't have shortcut.
-Go to pallette (cmd shift p  or F6 i have changed to F6)
-type git push, then hit enter.
-I have already set password and username in simplici so it will easily push it.
-We will see green buttom showing pushing.
-Now go to remote browser and refresh the file, you will see the changes.
-Edited again.
-cmd shift a is add.
-cmd shift c is commit.
-cmd shift p for push.
+cmd shift p was previously pallette i replaced it by F6.
 cmd shift d is duplicate lines.
 
-cmd shift p is preview file
+cmd shift a is add.
+cmd shift b is add-all.
+cmd shift c is commit.
+cmd shift p for push.
+cmd shift u is diff
