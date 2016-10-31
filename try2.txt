@@ -1,3 +1,7 @@
-this is trial from atom.
-again edited this file.
-trying git diff.
+this is a trial of using git hub using gitplus in atom editor.
+It we edited the file we will see the color change to brown in the git repo
+in the left hand side pane.
+Type cmd shift a to add file.
+We will see green notificaiton from git plus that the file has been added.
+To commit cmd sht c.
+In the bottom right we also see number of lines added and deleted.
