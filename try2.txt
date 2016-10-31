@@ -13,4 +13,5 @@ I have already set password and username in simplici so it will easily push it.
 We will see green buttom showing pushing.
 Now go to remote browser and refresh the file, you will see the changes.
 Edited again.
-cmd shift a then c for add and comment.
+cmd shift a then c for add and comment and save.
+I have added cmd shift p for git push.
