@@ -15,3 +15,4 @@ Now go to remote browser and refresh the file, you will see the changes.
 Edited again.
 cmd shift a then c for add and comment and save.
 cmd shift a then a for add all and comment.
+cmd shift p for push.
