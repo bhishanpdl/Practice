@@ -18,4 +18,4 @@ cmd shift c is commit.
 cmd shift p for push.
 cmd shift d is duplicate lines.
 
-cmd shift p is preview files.
+cmd shift p is preview file
