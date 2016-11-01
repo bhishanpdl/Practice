@@ -7,4 +7,3 @@ cmd shift c is commit.
 cmd shift p for push.
 cmd shift u is diff
 changed locally.
-changed again.
