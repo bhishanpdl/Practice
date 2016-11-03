@@ -2,3 +2,5 @@ hello
 how are you.
 added again.
 git push.
+git diff.
+git diff.
