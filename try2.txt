@@ -1,9 +1,0 @@
-cmd shift p was previously pallette i replaced it by F6.
-cmd shift d is duplicate lines.
-
-cmd shift a is add.
-cmd shift b is add-all.
-cmd shift c is commit.
-cmd shift p for push.
-cmd shift u is diff
-changed locally.
