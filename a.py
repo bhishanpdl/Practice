@@ -9,3 +9,4 @@ print('added one line')
 print('added again')
 
 print(5)
+print(6)
