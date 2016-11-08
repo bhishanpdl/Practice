@@ -3,7 +3,9 @@
 # @Last modified by:   poudel
 # @Last modified time: 08-Nov-2016 13:11
 
-a = 5
-b = 6
 
-print('{} {:.3g} {}'.format('b', b, ''))
+print('hello')
+print('added one line')
+print('added again')
+
+print(5)
