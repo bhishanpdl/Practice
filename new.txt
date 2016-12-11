@@ -1,2 +1,7 @@
 added on nov 3 9:18 pm
 edited 9:19 pm
+'atom-text-editor[data-grammar="source python"]':
+  'ctrl-alt-s': 'python-autopep8:format'
+  'atom-workspace, atom-workspace atom-text-editor':
+    'ctrl-shift-M': 'markdown-preview-plus:toggle'
+dec 11
