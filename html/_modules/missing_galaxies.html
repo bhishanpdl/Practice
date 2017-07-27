@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>missing_galaxies &#8212; Bhishan&#39;s 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scrolls.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/print.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/theme_extras.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head>
+  <body role="document">
+    <div id="content">
+      <div class="header">
+        <h1 class="heading"><a href="../index.html"
+          title="back to the documentation overview"><span>missing_galaxies</span></a></h1>
+      </div>
+      <div class="relnav" role="navigation" aria-label="related navigation">
+        <a href="#">missing_galaxies</a>
+      </div>
+      <div id="contentwrapper">
+        
+  <h1>Source code for missing_galaxies</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-#</span>
+<span class="c1">#</span>
+<span class="c1"># Author      : Bhishan Poudel; Physics Graduate Student, Ohio University</span>
+<span class="c1"># Date        : Jan 4, 2017</span>
+<span class="c1"># Last update : Jun 19, 2017 Mon</span>
+
+<div class="viewcode-block" id="missing_galaxies"><a class="viewcode-back" href="../missing_galaxies.html#missing_galaxies.missing_galaxies">[docs]</a><span class="k">def</span> <span class="nf">missing_galaxies</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Missing galaxies.</span>
+
+<span class="sd">    e.g. f814w_devauc_two_comp1.fits</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pth</span> <span class="o">=</span> <span class="s1">&#39;/Users/poudel/Research/galfit_usage/verify_2cmp_fitting/&#39;</span> <span class="o">+</span>\
+          <span class="s1">&#39;f814w_fitting/devauc_two_comp/f814w_devauc_two_comp*.fits&#39;</span>
+    <span class="n">nums</span> <span class="o">=</span> <span class="n">natsort</span><span class="o">.</span><span class="n">natsorted</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s1">&#39;(.+?)(\d+)(\.fits$)&#39;</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+                              <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">pth</span><span class="p">)])</span>
+    <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">302</span><span class="p">)</span> <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Total number of missing galaxies    : &#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Total number of non-missing galaxies: &#39;</span><span class="p">,</span> <span class="mi">302</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">missing</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Missing galaxies: &#39;</span><span class="p">,</span> <span class="n">missing</span><span class="p">)</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    
+    <span class="c1"># Imports</span>
+    <span class="kn">import</span> <span class="nn">glob</span>
+    <span class="kn">import</span> <span class="nn">re</span>
+    <span class="kn">import</span> <span class="nn">natsort</span>
+    
+    <span class="n">missing_galaxies</span><span class="p">()</span>
+</pre></div>
+
+      </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Bhishan Poudel.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>
