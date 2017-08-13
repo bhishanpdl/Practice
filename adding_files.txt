@@ -1,0 +1,10 @@
+# Author: Bhihan Poudel
+# Date: Aug 13, 2017
+
+Topic: Adding files to project in Sphinx documentation and RTD use
+====================================================================
+pkg/a.py,b.py
+docs/a.rst;b.rst
+
+sphinx-apidoc -o pkg docs
+

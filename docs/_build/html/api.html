@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API Documentation &#8212; autodoc-example 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/haiku.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to autodoc-example’s documentation!" href="index.html" /> 
+  </head>
+  <body role="document">
+      <div class="header" role="banner"><h1 class="heading"><a href="index.html">
+          <span>autodoc-example 0.1 documentation</span></a></h1>
+        <h2 class="heading"><span>API Documentation</span></h2>
+      </div>
+      <div class="topnav" role="navigation" aria-label="top navigation">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">Welcome to autodoc-example&#8217;s documentation!</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+      <div class="content">
+        
+        
+  <div class="section" id="module-pkg">
+<span id="api-documentation"></span><span id="api"></span><h1>API Documentation<a class="headerlink" href="#module-pkg" title="Permalink to this headline">¶</a></h1>
+<p>For normal use, all you have to do is import the package:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pkg</span>
+</pre></div>
+</div>
+<p>This will import the following:</p>
+<ul class="simple">
+<li>My amazing <a class="reference internal" href="pkg.html#pkg.Pkg" title="pkg.Pkg"><code class="xref py py-class docutils literal"><span class="pre">Pkg</span></code></a> class.</li>
+<li>The awesome <a class="reference internal" href="pkg.html#pkg.foo" title="pkg.foo"><code class="xref py py-func docutils literal"><span class="pre">foo()</span></code></a> function.</li>
+<li>Several <a class="reference internal" href="#id1">constants</a> representing stuff.</li>
+</ul>
+<div class="section" id="using-the-pkg-class">
+<h2>Using the Pkg Class<a class="headerlink" href="#using-the-pkg-class" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pkg.Pkg">
+<em class="property">class </em><code class="descclassname">pkg.</code><code class="descname">Pkg</code><span class="sig-paren">(</span><em>direction</em>, <em>speed=30</em><span class="sig-paren">)</span><a class="headerlink" href="#pkg.Pkg" title="Permalink to this definition">¶</a></dt>
+<dd><p>My Pkg class.</p>
+<p>My simple Pkg class.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A useful note might appear here.</p>
+</div>
+<dl class="method">
+<dt id="pkg.Pkg.change_direction">
+<code class="descname">change_direction</code><span class="sig-paren">(</span><em>new_direction</em><span class="sig-paren">)</span><a class="headerlink" href="#pkg.Pkg.change_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to allow changing the class
+instance&#8217;s direction attribute.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>new_direction</strong> &#8211; string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<p>Pkg explanation goes here.</p>
+</div>
+<div class="section" id="using-foo-function">
+<h2>Using Foo Function<a class="headerlink" href="#using-foo-function" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pkg.foo">
+<code class="descclassname">pkg.</code><code class="descname">foo</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pkg.foo" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="function">
+<dt>
+<code class="descclassname">pkg.</code><code class="descname">foo</code><span class="sig-paren">(</span><em>value1</em>, <em>value2</em><span class="sig-paren">)</span></dt>
+<dd></dd></dl>
+
+<p>Pass two values and return their sum.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>value1</strong> &#8211; integer</li>
+<li><strong>value2</strong> &#8211; integer</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">integer</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="constants">
+<h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<p id="id1">Four unneeded constants have been defined as examples:</p>
+<ul class="simple">
+<li>NORTH</li>
+<li>EAST</li>
+<li>SOUTH</li>
+<li>WEST</li>
+</ul>
+</div>
+</div>
+
+
+      </div>
+      <div class="bottomnav" role="navigation" aria-label="bottom navigation">
+      
+        <p>
+        «&#160;&#160;<a href="index.html">Welcome to autodoc-example&#8217;s documentation!</a>
+        &#160;&#160;::&#160;&#160;
+        <a class="uplink" href="index.html">Contents</a>
+        </p>
+
+      </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Eric Beahan.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>
