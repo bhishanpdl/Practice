@@ -8,3 +8,4 @@ docs/a.rst;b.rst
 
 sphinx-apidoc -o pkg docs
 
+changed from macpro.
