@@ -3,8 +3,7 @@
 
 Topic: Adding files to project in Sphinx documentation and RTD use
 ====================================================================
-pkg/a.py,b.py
+pkg/a.py, pkg/b.py
 docs/a.rst;b.rst
 
 sphinx-apidoc -o pkg docs
-
