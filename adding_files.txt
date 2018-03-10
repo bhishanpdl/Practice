@@ -7,3 +7,5 @@ pkg/a.py, pkg/b.py
 docs/a.rst;b.rst
 
 sphinx-apidoc -o pkg docs
+
+chagned online
