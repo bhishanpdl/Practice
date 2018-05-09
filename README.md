@@ -1,1 +1,1 @@
-[link](http://beardedspice.github.io/){:target="_blank"}
+<a href="http://example.com/" target="_blank">example</a>
