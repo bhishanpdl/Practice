@@ -1,2 +1,2 @@
-[Link](https://example.org/ "title" target="_blank")
+[link](https://unix.stackexchange.com/questions/299321/bash-multiplication-and-addition).
 
