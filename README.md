@@ -1,2 +1,2 @@
-This is a practice repo. abc.
+This is a practice repo.
 
