@@ -1,3 +1,3 @@
 We can view the rendered version of notebook using [nbviewer](http://nbviewer.ipython.org/github/bhishanpdl/pdl_practice/tree/master).
 
-![](plot.svg)
+http://htmlpreview.github.io/?https://github.com/bhishanpdl/pdl_practice/blob/master/plot.html
