@@ -3,6 +3,4 @@ We can view the rendered version of notebook using [nbviewer](http://nbviewer.ip
 http://htmlpreview.github.io/?https://github.com/bhishanpdl/pdl_practice/blob/master/plot.html
 
 
-$$
-\alpha = 3
-$$
+$\alpha = 3$
