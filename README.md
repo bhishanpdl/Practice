@@ -10,15 +10,10 @@ http://htmlpreview.github.io/?https://github.com/bhishanpdl/pdl_practice/blob/ma
 
 # pasting dataframe output
 ```python
-
-GDP-2013	GDP-2014	commodity	country
-0	5000	5500	5	Afghanistan
-1	15012	16500	5	USA
-2	7500	8300	7	Germany
-
-
-      index    GDP-2013    GDP-2014   commodity     country
-          0        5000        5500           5 Afghanistan
-          1       15012       16500           5         USA
-          2        7500        8300           7     Germany
+      index   commodity     partner trade_value        year
+          0           1 Afghanistan         100        2013
+          1           2      Zambia         110        2016
+          2           2     Germany         120        2014
+          3           2 Afghanistan         150        2014
+          4           5         USA        1120        2013
 ```
