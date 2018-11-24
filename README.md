@@ -6,3 +6,14 @@ http://htmlpreview.github.io/?https://github.com/bhishanpdl/pdl_practice/blob/ma
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" title="\Large x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}" />
 
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;\frac{F-32}{180}=\frac{C-0}{100}=\frac{K-273.15}{100}" title="\Large \frac{F-32}{180}=\frac{C-0}{100}=\frac{K-273.15}{100}" />
+
+
+# pasting dataframe output
+```python
+
+GDP-2013	GDP-2014	commodity	country
+0	5000	5500	5	Afghanistan
+1	15012	16500	5	USA
+2	7500	8300	7	Germany
+
+```
