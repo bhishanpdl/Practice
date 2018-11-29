@@ -7,17 +7,5 @@ http://htmlpreview.github.io/?https://github.com/bhishanpdl/pdl_practice/blob/ma
 
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;\frac{F-32}{180}=\frac{C-0}{100}=\frac{K-273.15}{100}" title="\Large \frac{F-32}{180}=\frac{C-0}{100}=\frac{K-273.15}{100}" />
 
-
-# pasting dataframe output
-```python
-      index   commodity     partner trade_value        year
-          0           1 Afghanistan         100        2013
-          1           2      Zambia         110        2016
-          2           2     Germany         120        2014
-          3           2 Afghanistan         150        2014
-          4           5         USA        1120        2013
-```
-
-
 # practice
 :tada:
