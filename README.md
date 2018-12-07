@@ -12,3 +12,7 @@ http://htmlpreview.github.io/?https://github.com/bhishanpdl/pdl_practice/blob/ma
 
 # pdf
 https://github.com/bhishanpdl/pdl_practice/blob/master/bokeh.pdf
+
+<object data="bokeh.pdf" type="application/x-pdf" title="SamplePdf" width="500" height="720">
+    <a href="bokeh.pdf">shree</a> 
+</object>
