@@ -11,4 +11,4 @@ http://htmlpreview.github.io/?https://github.com/bhishanpdl/pdl_practice/blob/ma
 :tada:  :truck:
 
 
-![](matplotlib.jpg)
+![](matplotlib.png)
