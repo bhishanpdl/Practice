@@ -11,5 +11,5 @@ http://htmlpreview.github.io/?https://github.com/bhishanpdl/pdl_practice/blob/ma
 :tada:  :truck:
 
 
-![](matplotlib.png)
+![](matplotlib3.png)
 ![](matplotlib2.png)
