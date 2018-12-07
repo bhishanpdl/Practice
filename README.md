@@ -12,3 +12,4 @@ http://htmlpreview.github.io/?https://github.com/bhishanpdl/pdl_practice/blob/ma
 
 
 ![](matplotlib.png)
+![](matplotlib2.png)
