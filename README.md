@@ -9,3 +9,6 @@ http://htmlpreview.github.io/?https://github.com/bhishanpdl/pdl_practice/blob/ma
 
 # practice
 :tada:  :truck:
+
+# pdf
+[embed]https://github.com/bhishanpdl/pdl_practice/blob/master/bokeh.pdf[/embed]
