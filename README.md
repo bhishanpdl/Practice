@@ -12,8 +12,8 @@ http://htmlpreview.github.io/?https://github.com/bhishanpdl/pdl_practice/blob/ma
 
 # use pdf in markdown
 
-<object data="https://github.com/bhishanpdl/pdl_practice/bokeh.pdf" type="application/pdf" width="700px" height="700px">
-    <embed src="https://github.com/bhishanpdl/pdl_practice/bokeh.pdf">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://github.com/bhishanpdl/pdl_practice/bokeh.pdf">Download PDF</a>.</p>
+<object data="https://github.com/bhishanpdl/pdl_practice/blob/master/bokeh.pdf" type="application/pdf" width="700px" height="700px">
+    <embed src="https://github.com/bhishanpdl/pdl_practice/blob/master/bokeh.pdf">
+        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://github.com/bhishanpdl/pdl_practice/blob/master/bokeh.pdf">Download PDF</a>.</p>
     </embed>
 </object>
