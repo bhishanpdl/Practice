@@ -14,5 +14,12 @@ http://htmlpreview.github.io/?https://github.com/bhishanpdl/pdl_practice/blob/ma
 https://github.com/bhishanpdl/pdl_practice/blob/master/bokeh.pdf
 
 <object data="bokeh.pdf" type="application/x-pdf" title="SamplePdf" width="500" height="720">
-    <a href="bokeh.pdf">shree</a> 
+    <a href="bokeh.pdf">link to bokeh pdf</a> 
+</object>
+
+
+<object data="bokeh.pdf" type="application/pdf" width="700px" height="700px">
+    <embed src="bokeh.pdf">
+        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="bokeh.pdf">Download PDF</a>.</p>
+    </embed>
 </object>
