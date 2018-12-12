@@ -23,3 +23,7 @@ https://github.com/bhishanpdl/pdl_practice/blob/master/bokeh.pdf
         <p>This browser does not support PDFs. Please download the PDF to view it: <a href="bokeh.pdf">Download PDF</a>.</p>
     </embed>
 </object>
+
+
+# markdown photo
+![](https://i.stack.imgur.com/OfXH6.png)
