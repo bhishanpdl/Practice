@@ -26,4 +26,4 @@ https://github.com/bhishanpdl/pdl_practice/blob/master/bokeh.pdf
 
 
 # markdown photo
-<img src="https://i.stack.imgur.com/OfXH6.png" alt="drawing" height="200" width="200"/>
+<img src="https://i.stack.imgur.com/OfXH6.png" alt="drawing" height="100" width="300"/>
