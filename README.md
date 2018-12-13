@@ -7,8 +7,11 @@ http://htmlpreview.github.io/?https://github.com/bhishanpdl/pdl_practice/blob/ma
 
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;\frac{F-32}{180}=\frac{C-0}{100}=\frac{K-273.15}{100}" title="\Large \frac{F-32}{180}=\frac{C-0}{100}=\frac{K-273.15}{100}" />
 
-# practice
-:tada:  :truck: :play: :pause:
+# emoticons and images
+:tada:  :truck:
+💡 
+👀
+▶
 
 # emoticons
 # 👀 Examples
