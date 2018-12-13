@@ -10,6 +10,19 @@ http://htmlpreview.github.io/?https://github.com/bhishanpdl/pdl_practice/blob/ma
 # practice
 :tada:  :truck:
 
+# emoticons
+# 👀 Examples
+### ▶ Strings can be tricky sometimes *
+
+1\.
+```py
+>>> a = "some_string"
+>>> id(a)
+140420665652016
+>>> id("some" + "_" + "string") # Notice that both the ids are same.
+140420665652016
+```
+
 # pdf
 https://github.com/bhishanpdl/pdl_practice/blob/master/bokeh.pdf
 
