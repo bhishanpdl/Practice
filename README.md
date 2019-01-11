@@ -43,3 +43,6 @@ https://github.com/bhishanpdl/pdl_practice/blob/master/bokeh.pdf
 
 # markdown photo
 <img src="https://i.stack.imgur.com/OfXH6.png" alt="drawing" height="100" width="300"/>
+
+# markdown local images
+![](galaxy_fitting.png)
