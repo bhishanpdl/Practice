@@ -1,11 +1,13 @@
 # Creation of Scaled Bulge, Disk, and Monochromatic Images
 We have total 201 number of HST images, so we have 201 bulge images and 201 disk images.
-From these two folders we create so called $scaled\_bulge$, $scaled\_disk$, and $scaled\_bulge\_disk$ folders. 
-For this, we first find the $bulge\_factor$ (bf) and $disk\_factor$ (df) then we create scaled galaxies.
+From these two folders we create so called `scaled_bulge`, `scaled_disk`, and `scaled_bulge_disk` folders. 
+For this, we first find the `bulge_factor` (bf) and `disk_factor` (df) then we create scaled galaxies.
 
 $$
-scaled\_bulge = bf * bulge.fits \\
-scaled\_disk = df * disk.fits
+\begin{eqnarray}
+scaledbulge = bf * bulge.fits \\
+scaleddisk = df * disk.fits
+\end{eqnarray}
 $$
  
  
@@ -13,10 +15,12 @@ $$
 To find bulge and disk factors, first we find fraction for bulge ratio and fraction of disk ratio as follows:
 
 $$
+\begin{eqnarray}
  f_{ratb} = \frac{\int_{\lambda0}^{\lambda20} f_{bz}(\lambda)d\lambda}
  {\int_{\lambda{hst0}}^{\lambda_{hst20}} f_{bzcut}(\lambda)d\lambda} \\
  f_{ratd} = \frac{\int_{\lambda0}^{\lambda20} f_{dz}(\lambda)d\lambda}
  {\int_{\lambda{hst0}}^{\lambda_{hst20}} f_{dzcut}(\lambda)d\lambda}
+ \begin{eqnarray}
 $$
 Here, $f_{bz}$ is the flux column from the SED file according the redshift $z$ for the bulge and $f_{bzcut}$ is the 
 flux column for cutout galaxy. Here, we have used the galaxy cutout redshift as $ z_{cutout} = 0.2$. Similarly we have the flux columns for disk galaxies.
