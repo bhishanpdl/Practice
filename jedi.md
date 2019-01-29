@@ -3,10 +3,8 @@ We have total 201 number of HST images, so we have 201 bulge images and 201 disk
 From these two folders we create so called `scaled_bulge`, `scaled_disk`, and `scaled_bulge_disk` folders. 
 For this, we first find the `bulge_factor` (bf) and `disk_factor` (df) then we create scaled galaxies.
 
-  $$
-  scaledbulge = bf * bulge.fits\\
-  scaleddisk = df * disk.fits
-$$
+  $$scaledbulge = bf * bulge.fits$$
+  $$ scaleddisk = df * disk.fits$$
  
  
 
