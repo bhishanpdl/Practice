@@ -1,7 +1,7 @@
 
-Table of Contents
+:books: :pandas_face: [**Learn Pandas"** ](https://pandas.pydata.org/pandas-docs/stable/getting_started/tutorials.html) :books: :pandas_face:
 =================
-   * [Pandas Caveats and Limitations](#pandas-caveats-and-limitations)
+   * ### Pandas Caveats and Limitations  [:arrow_heading_down:](#pandas-caveats-and-limitations)
    * [Speed and Memory](#speed-and-memory)
    * [Useful Commands](#useful-commands)
    * [Efficient sub-selection](#efficient-sub-selection)
