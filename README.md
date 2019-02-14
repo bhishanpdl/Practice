@@ -1,3 +1,16 @@
+:panda_face: [**"Learn Pandas"** ](https://pandas.pydata.org/pandas-docs/stable/getting_started/tutorials.html) :panda_face:
+
+=================
+   * [Nbviewer](#nbviewer)
+   * [emoticons and images](#emoticons-and-images)
+   * [emoticons](#emoticons)
+   * [<g-emoji class="g-emoji" alias="eyes" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f440.png">👀</g-emoji> Examples](#-examples)
+         * [▶ Strings can be tricky sometimes *](#-strings-can-be-tricky-sometimes-)
+   * [pdf](#pdf)
+   * [markdown photo](#markdown-photo)
+   * [markdown local images](#markdown-local-images)
+
+# Nbviewer
 We can view the rendered version of notebook using [nbviewer](http://nbviewer.ipython.org/github/bhishanpdl/pdl_practice/tree/master).
 
 http://htmlpreview.github.io/?https://github.com/bhishanpdl/pdl_practice/blob/master/plot.html
