@@ -1,6 +1,5 @@
-📖 :panda_face: [**"Learn Pandas"** ](https://pandas.pydata.org/pandas-docs/stable/getting_started/tutorials.html) :panda_face: 📖
-
-========================================
+:books: :panda_face: [**Learn Pandas"** ](https://pandas.pydata.org/pandas-docs/stable/getting_started/tutorials.html) :books: :panda_face:
+=================================================
    * ### Nbviewer [:arrow_heading_down:](#nbviewer)
    * [emoticons and images](#emoticons-and-images)
    * [emoticons](#emoticons)
