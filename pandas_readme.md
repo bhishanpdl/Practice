@@ -1,23 +1,21 @@
-
-:books: :panda_face: [**Learn Pandas"** ](https://pandas.pydata.org/pandas-docs/stable/getting_started/tutorials.html) :books: :panda_face:
+:balloon: :tada: :books: :panda_face: [**A Quick Summary of Pandas Operations"** ](https://pandas.pydata.org/pandas-docs/stable/getting_started/tutorials.html) :books: :panda_face: :balloon: :tada:
 
 ### Contents
-==============================================
-   * [Pandas Caveats and Limitations :arrow_heading_down:](#pandas-caveats-and-limitations)
-   * [Speed and Memory :arrow_heading_down:](#speed-and-memory)
-   * [Useful Commands  :arrow_heading_down:](#useful-commands)
-   * [Efficient sub-selection  :arrow_heading_down:](#efficient-sub-selection)
-   * [Pandas <strong>apply</strong>  :arrow_heading_down:](#pandas-apply)
-   * [Pandas <strong>where</strong>  :arrow_heading_down:](#pandas-where)
-   * [Pandas Series <strong>extract</strong>  :arrow_heading_down:](#pandas-series-extract)
-   * [Pandas assign **pop str extract  :arrow_heading_down:](#pandas-assign-pop-str-extract)
-   * [Pandas <strong>map</strong>  :arrow_heading_down:](#pandas-map)
-   * [Pandas <strong>rename</strong>  :arrow_heading_down:](#pandas-rename)
-   * [Pandas <strong>groupby</strong>  :arrow_heading_down:](#pandas-groupby)
-   * [Pandas <strong>cut</strong>  :arrow_heading_down:](#pandas-cut)
-   * [Pandas <strong>qcut</strong> and <strong>pivot_table</strong>  :arrow_heading_down:](#pandas-qcut-and-pivot_table)
-   * [Pandas <strong>stack</strong>  :arrow_heading_down:](#pandas-stack)
-   * [Pandas <strong>unstack</strong>  :arrow_heading_down:](#pandas-unstack)
+   * [Pandas Caveats and Limitations  :thumbsdown:](#pandas-caveats-and-limitations)
+   * [Speed and Memory  :bullettrain_side:](#speed-and-memory)
+   * [Useful Commands](#useful-commands)
+   * [Efficient sub-selection](#efficient-sub-selection)
+   * [Pandas <strong>apply</strong>](#pandas-apply)
+   * [Pandas <strong>where</strong>](#pandas-where)
+   * [Pandas Series <strong>extract</strong>](#pandas-series-extract)
+   * [Pandas assign **pop str extract](#pandas-assign-pop-str-extract)
+   * [Pandas <strong>map</strong>](#pandas-map)
+   * [Pandas <strong>rename</strong>](#pandas-rename)
+   * [Pandas <strong>groupby</strong>](#pandas-groupby)
+   * [Pandas <strong>cut</strong>](#pandas-cut)
+   * [Pandas <strong>qcut</strong> and <strong>pivot_table</strong>](#pandas-qcut-and-pivot_table)
+   * [Pandas <strong>stack</strong>](#pandas-stack)
+   * [Pandas <strong>unstack</strong>](#pandas-unstack)
    * [Pandas <strong>pivot</strong>](#pandas-pivot)
    * [Pandas <strong>melt</strong>](#pandas-melt)
    * [Pandas <strong>wide_to_long</strong>](#pandas-wide_to_long)
@@ -44,13 +42,12 @@
    * [Basic Python and Numpy](#basic-python-and-numpy)
    * [Useful links](#useful-links)
 
-
-[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/pdl_practice#contents) 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas Caveats and Limitations
 #==============================================================================
 - Pandas operations are slow, but numpy operations are fast.
 - Pandas is highly memory inefficient, it takes about 10 times RAM that of loaded data.
-- To parallize pandas operation we can install and use modin.pandas
+- To parallize pandas operation we can use modin.pandas or dask or use vaex or PySpark etc.
 
 ```python
 # Libraries dependencies
@@ -91,7 +88,8 @@ a = a + b # TypeError: can only concatenate list (not "str") to list
 a += b
 print(a) # [1, 2, 3, 'h', 'e', 'l', 'l', 'o']
 ```
-[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/pdl_practice#contents) 
+
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Speed and Memory
 #==============================================================================
 ```python
@@ -157,7 +155,8 @@ def double_every_value_withnumba(x):
 %timeit df['col1_doubled'] = df.a*2  # 233 us
 %timeit df['col1_doubled'] = double_every_value_withnumba(df.a.values) # 145 us
 ```
-[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/pdl_practice#contents) 
+
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Useful Commands
 #==============================================================================
 ```python
@@ -289,6 +288,7 @@ df.nlargest(10, 'col_5').head() # gives all columns, but sorts by col_5
 df.nlargest(100, 'imdb_score').nsmallest(5, 'budget')
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Efficient sub-selection
 #==============================================================================
 ```python
@@ -302,7 +302,7 @@ df = df.sort_index()
 df.loc['firstname, lastname']
 ```
 
-
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Avoid **apply** use df.iterrows
 #==============================================================================
 Reference: https://ys-l.github.io/posts/2015/08/28/how-not-to-use-pandas-apply/
@@ -362,7 +362,7 @@ test() # OK
 %timeit run_apply(df) # 1 loop, best of 3: 4min 12s per loop
 ```
 
-
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **apply**
 #==============================================================================
 ```python
@@ -409,6 +409,7 @@ s.apply(between, args=(3,), high=6)
 
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **where**
 #==============================================================================
 ```python
@@ -416,6 +417,7 @@ df.where(mask, -df) # mask = df % 3 == 0  # divisibles of 3 are positive (eg. 0,
 df.where(lambda x: x > 4, lambda x: x + 10) # if value is larger than 4, add 10 to it.
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas Series **extract**
 #==============================================================================
 ```python
@@ -429,6 +431,7 @@ df[['c1','c2','c3']] = df['c0'].str.split(expand=True) # extra whitespaces are r
 df = df.drop('c0',1)
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas assign **pop str extract
 #==============================================================================
 ```python
@@ -454,6 +457,7 @@ df2 = (df.drop('BP',axis=1)
 df = df.assign(**df.pop('BP').str.extract(r'(?P<BPS>\d+)/(?P<BPD>\d+)',expand=True).astype(float))
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **map**
 #==============================================================================
 ```python
@@ -475,6 +479,7 @@ s = s.astype(str).str.replace(r'14', r'0-14',regex=True)
                  .str.replace(r'(\d\d)(\d\d)', r'\1-\2',regex=True))
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **rename**
 #==============================================================================
 ```python
@@ -499,6 +504,7 @@ df = pd.wide_to_long(df,
                        sep='_').reset_index()
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **groupby**
 #==============================================================================
 ```python
@@ -607,6 +613,7 @@ f(g(h(df), arg1=1), arg2=2, arg3=3)
     )
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **cut**
 #==============================================================================
 ```python
@@ -623,7 +630,7 @@ cuts = pd.cut(df['A'], bins=bins, labels=labels,include_lowest=True,right=False)
 df.groupby(cuts)['B'].count().plot.bar()
 ```
 
-
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **qcut** and **pivot_table**
 #==============================================================================
 ```python
@@ -632,6 +639,7 @@ factor = pd.qcut(ser, [0, .25, .5, .75, 1.])
 ser.groupby(factor).mean()
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **stack**
 #==============================================================================
 ```python
@@ -667,6 +675,7 @@ Agnostic     27       34       60       81       76      137
   .head())
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **unstack**
 #==============================================================================
 ```python
@@ -677,6 +686,7 @@ flights.groupby(['AIRLINE', 'ORG_AIR'])['CANCELLED'].sum().unstack('ORG_AIR', fi
 flights.pivot_table(index='AIRLINE', columns='ORG_AIR', values='CANCELLED', aggfunc='sum',fill_value=0).round(2)
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **pivot**
 #==============================================================================
 ```python
@@ -709,6 +719,7 @@ winner['Winner'] = np.where(winner['Amy'] < winner['Bob'], 'Amy', 'Bob')
 winner.style.highlight_min(axis=1)
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **melt**
 #==============================================================================
 ```python
@@ -734,6 +745,7 @@ df.melt(id_vars=['State'],
    ).head(2)
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **wide_to_long**
 #==============================================================================
 ```python
@@ -783,6 +795,7 @@ print(df1)
 3  2000   Adele 2000-09-09  3:15  Hello    2    87
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **read_csv** with lambda usecols
 #==============================================================================
 ```python
@@ -790,7 +803,7 @@ usecols_func = lambda x: 'likes_' in x or x == 'A'
 df = pd.read_csv('data.csv', index_col='A', usecols=usecols_func)
 ```
 
-
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **read_json**
 #==============================================================================
 ```python
@@ -800,6 +813,7 @@ pd.read_json('[{"A": 1, "B": 2}, {"A": 3, "B": 4}]')
 1  3  4
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **MultiIndex**
 #==============================================================================
 ```python
@@ -842,6 +856,7 @@ x.columns = [i[0]+'_'+i[1] for i in x.columns.ravel()]
 2    8.000000   1.414214     9.750000
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **eval**
 #==============================================================================
 https://pandas.pydata.org/pandas-docs/stable/enhancingperf.html#enhancingperf-eval
@@ -873,6 +888,7 @@ x = pd.DataFrame([df.eval(col).values for col in cols], columns=cols)
 df.assign(**x)
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas **query**
 #==============================================================================
 ```python
@@ -896,6 +912,8 @@ df.columns = df.columns.map(lambda x: x.replace(' ', '_') if isinstance(x, str) 
 q = ' and '.join([f'{i} != {i}.min()' for i in df.columns])
 df.query(q)
 ```
+
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # pandas.io.json.json_normalize
 #==============================================================================
 ```python
@@ -919,6 +937,7 @@ data = [{'state': 'Florida',
 json_normalize(data=data,record_path='counties', meta=['state', 'shortname', ['info', 'governor']])
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas string extract, slice
 #==============================================================================
 ```python
@@ -933,6 +952,7 @@ df['year'] = df['gdp'].str.slice(4).astype(float) # gdp == 'GDP-2013' to year = 
 df['year'] = df['gdp'].str[4:].astype(float) # gdp == 'GDP-2013' to year = 2013, if there are nans
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Pandas adding date month columns
 #==============================================================================
 ```python
@@ -956,6 +976,7 @@ dfx['date'] = df['year'].apply(lambda x: '{:4d}'.format(x)) + '-' +\
               df['day'].str[1:].astype(int).apply(lambda x: '{:02d}'.format(x))
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Tidy up when single column contains multiple variables
 #==============================================================================
 ```python
@@ -979,6 +1000,7 @@ df = pd.DataFrame({'Name': list('ABC'),
            .rename_axis(None, axis='columns'))
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Tidy up when single cell contains multiple values
 #==============================================================================
 ```python
@@ -1007,6 +1029,7 @@ df['longitude_dir'] =df['longitude_dir'].astype('category')
 df.dtypes
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Mathematics
 #==============================================================================
 ```python
@@ -1014,6 +1037,7 @@ df = pd.DataFrame({ 'minutes': [55, 70,np.nan]})
 df['hour'], df['min'] = np.divmod(df['minutes'].values,60)
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Multiple conditions
 #==============================================================================
 ```python
@@ -1050,6 +1074,7 @@ choices     = [ "high", 'medium', 'low' ]
 df["c0"] = np.select(conditions, choices, default=np.nan)
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # First and last percentage increase in values
 #==============================================================================
 ```python
@@ -1065,6 +1090,7 @@ df = (df.groupby('name')['value']
        .reset_index())
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # New column with numeric manipulations
 #==============================================================================
 ```python
@@ -1076,6 +1102,7 @@ df.loc[is_num,'new_col']=(
        df.loc[is_num, "units"]/1000)
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Weighted average after groupby
 #==============================================================================
 ```python
@@ -1090,6 +1117,7 @@ sum(df1.val1 * df1.wt) / df1.wt.sum() # 15.0
 (10 * 0.1 + 20 * 0.1) / 0.2 # 15.0
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Wrapping aggregation functions
 #==============================================================================
 ```python
@@ -1110,6 +1138,7 @@ pct_10_30k = make_agg_func(pct_between, 'pct_10_30k', 10000, 30000)
 college.groupby(['STABBR', 'RELAFFIL'])['UGDS'].agg(['mean', pct_1_3k, pct_10_30k]).head()
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # One column has list of lists
 ```python
 df = pd.DataFrame({'team': ['A', 'B', 'C'],
@@ -1119,6 +1148,7 @@ df = pd.DataFrame({'team': ['A', 'B', 'C'],
  .join(df.team))
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # pandas and json to get currency conversion
 ```python
 import numpy as np
@@ -1144,6 +1174,7 @@ g = grouped['total_bill', 'tip'].mean().apply(lambda x: x*converter[conv]['val']
 print(g)
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Unnesting column with list
 #==============================================================================
 ```python
@@ -1156,6 +1187,7 @@ def unnest(df):
 unnest(df)
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Plottings
 #==============================================================================
 NOTE: Pandas plot requires multi-index data and the index-names becomes xticklabels
@@ -1184,6 +1216,8 @@ age_bins = [15, 30, 45, 60]
 sns.lmplot("age", "survived", titanic, hue="sex",
            palette='husl', x_bins=age_bins, logistic=True).set(xlim=(0, 80));
 ```
+
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Mixed examples
 #==============================================================================
 ```python
@@ -1232,7 +1266,7 @@ msk = np.random.rand(len(df)) < 0.8
 train, test = df[msk].copy(deep = True), df[~msk].copy(deep = True)
 ```
 
-
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Basic Python and Numpy
 ```python
 # looping
@@ -1357,11 +1391,13 @@ with np.printoptions(precision=2,suppress=True):
     print(x)
 ```
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Useful links
 #==============================================================================
 - [realpython](https://realpython.com/python-pandas-tricks/) 
 - [datacamp pandas merge_asof](https://campus.datacamp.com/courses/merging-dataframes-with-pandas/merging-data?ex=13#skiponboarding)
 
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/Tutorial-pandas#contents) 
 # Useful Images
 ![](images/data_pipelines.png)
 ![](images/pandas_chaining.png)
