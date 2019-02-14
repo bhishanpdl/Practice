@@ -9,7 +9,7 @@
    * [Pandas <strong>where</strong>](#pandas-where)
    * [Pandas Series <strong>extract</strong>](#pandas-series-extract)
    * [Pandas assign **pop str extract](#pandas-assign-pop-str-extract)
-   * [Pandas <strong>map</strong>](#pandas-map)
+   * [Pandas <strong>map</strong>  🗺️](#pandas-map)
    * [Pandas <strong>rename</strong>](#pandas-rename)
    * [Pandas <strong>groupby</strong>](#pandas-groupby)
    * [Pandas <strong>cut</strong>](#pandas-cut)
