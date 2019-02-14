@@ -1,4 +1,4 @@
-:panda_face: [**"Learn Pandas"** ](https://pandas.pydata.org/pandas-docs/stable/getting_started/tutorials.html) :panda_face:
+📖 :panda_face: [**"Learn Pandas"** ](https://pandas.pydata.org/pandas-docs/stable/getting_started/tutorials.html) :panda_face: 📖
 
 =================
    * [Nbviewer](#nbviewer)
