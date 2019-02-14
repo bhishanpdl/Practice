@@ -4,7 +4,7 @@
 ### Contents
 ==============================================
    * Pandas <strong>Caveats and Limitations<strong>  [:arrow_heading_down:](#pandas-caveats-and-limitations)
-   * [Speed and Memory](#speed-and-memory)
+   * <strong>Speed and Memory<strong>  [:arrow_heading_down:](#speed-and-memory)
    * [Useful Commands](#useful-commands)
    * [Efficient sub-selection](#efficient-sub-selection)
    * [Pandas <strong>apply</strong>](#pandas-apply)
