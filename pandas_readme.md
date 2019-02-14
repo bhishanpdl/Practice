@@ -3,7 +3,7 @@
 
 ### Contents
 ==============================================
-   * ### Pandas Caveats and Limitations  [:arrow_heading_down:](#pandas-caveats-and-limitations)
+   * Pandas <strong>Caveats and Limitations<strong>  [:arrow_heading_down:](#pandas-caveats-and-limitations)
    * [Speed and Memory](#speed-and-memory)
    * [Useful Commands](#useful-commands)
    * [Efficient sub-selection](#efficient-sub-selection)
