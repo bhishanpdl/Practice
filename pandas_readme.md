@@ -46,7 +46,6 @@
 
 
 [Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/pdl_practice#contents) 
-
 # Pandas Caveats and Limitations
 #==============================================================================
 - Pandas operations are slow, but numpy operations are fast.
@@ -92,7 +91,7 @@ a = a + b # TypeError: can only concatenate list (not "str") to list
 a += b
 print(a) # [1, 2, 3, 'h', 'e', 'l', 'l', 'o']
 ```
-
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/pdl_practice#contents) 
 # Speed and Memory
 #==============================================================================
 ```python
@@ -158,7 +157,7 @@ def double_every_value_withnumba(x):
 %timeit df['col1_doubled'] = df.a*2  # 233 us
 %timeit df['col1_doubled'] = double_every_value_withnumba(df.a.values) # 145 us
 ```
-
+[Go to Contents :arrow_heading_up:](https://github.com/bhishanpdl/pdl_practice#contents) 
 # Useful Commands
 #==============================================================================
 ```python
