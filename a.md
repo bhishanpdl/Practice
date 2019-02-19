@@ -1,10 +1,8 @@
  :books:  :books:  :books:  :books: :books: :panda_face: [**A Quick Summary of Pandas Operations** ](https://pandas.pydata.org/pandas-docs/stable/getting_started/tutorials.html) :panda_face: :books:  :books:  :books:  :books: :books:
 
 ### Contents
-   * [Pandas ABC](#pandas-abc)
-   * [Pandas Basics](#pandas-basics)
-   * [Pandas <strong>apply</strong>](#pandas-apply)
-   * [Pandas <strong>cut</strong>](#pandas-cut)
+   * [Pandas ABC](#pandas-abc) * [Pandas Basics](#pandas-basics)
+   * [Pandas <strong>apply</strong>](#pandas-apply) * [Pandas <strong>cut</strong>](#pandas-cut)
    * [Pandas <strong>datetime</strong>](#pandas-datetime)
    * [Pandas Efficiency](#pandas-efficiency)
    * [Pandas <strong>eval</strong>](#pandas-eval)
