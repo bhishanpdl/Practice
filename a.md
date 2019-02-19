@@ -1,15 +1,11 @@
  :books:  :books:  :books:  :books: :books: :panda_face: [**A Quick Summary of Pandas Operations** ](https://pandas.pydata.org/pandas-docs/stable/getting_started/tutorials.html) :panda_face: :books:  :books:  :books:  :books: :books:
 
 ### Contents
-   * [Pandas ABC](#pandas-abc) * [Pandas Basics](#pandas-basics)
-   * [Pandas <strong>apply</strong>](#pandas-apply) * [Pandas <strong>cut</strong>](#pandas-cut)
-   * [Pandas <strong>datetime</strong>](#pandas-datetime)
-   * [Pandas Efficiency](#pandas-efficiency)
-   * [Pandas <strong>eval</strong>](#pandas-eval)
-   * [Pandas <strong>groupby</strong>](#pandas-groupby)
-   * [pandas <strong>json_normalize</strong>](#pandas-json_normalize)
-   * [Pandas <strong>map</strong>](#pandas-map)
-   * [Pandas <strong>melt</strong>](#pandas-melt)
+   * [Pandas ABC](#pandas-abc) * [Pandas Basics](#pandas-basics) * [Pandas <strong>apply</strong>](#pandas-apply) 
+   * [Pandas <strong>cut</strong>](#pandas-cut) * [Pandas <strong>datetime</strong>](#pandas-datetime)
+   * [Pandas Efficiency](#pandas-efficiency) * [Pandas <strong>eval</strong>](#pandas-eval)
+   * [Pandas <strong>groupby</strong>](#pandas-groupby) * [pandas <strong>json_normalize</strong>](#pandas-json_normalize) * [Pandas <strong>map</strong>](#pandas-map)
+  * [Pandas <strong>melt</strong>](#pandas-melt)
    * [Pandas <strong>MultiIndex</strong>](#pandas-multiindex)
    * [Pandas <strong>pivot</strong>](#pandas-pivot)
    * [Pandas <strong>query</strong>](#pandas-query)
