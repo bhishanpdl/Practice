@@ -1,13 +1,3 @@
-:books: :panda_face: [**Learn Pandas"** ](https://pandas.pydata.org/pandas-docs/stable/getting_started/tutorials.html) :books: :panda_face:
-=================================================
-   * ### Nbviewer [:arrow_heading_down:](#nbviewer)
-   * [emoticons and images](#emoticons-and-images)
-   * [emoticons](#emoticons)
-   * [<g-emoji class="g-emoji" alias="eyes" fallback-src="https://github.githubassets.com/images/icons/emoji/unicode/1f440.png">👀</g-emoji> Examples](#-examples)
-         * [ Strings can be tricky sometimes *](#-strings-can-be-tricky-sometimes-)
-   * [pdf](#pdf)
-   * [markdown photo](#markdown-photo)
-   * [markdown local images](#markdown-local-images)
 
 # Nbviewer
 We can view the rendered version of notebook using [nbviewer](http://nbviewer.ipython.org/github/bhishanpdl/pdl_practice/tree/master).
@@ -57,7 +47,7 @@ https://github.com/bhishanpdl/pdl_practice/blob/master/bokeh.pdf
 <img src="https://i.stack.imgur.com/OfXH6.png" alt="drawing" height="100" width="300"/>
 
 # hosting static html in each repo
-https://bhishanpdl.github.io/pdl_practice/
+https://bhishanpdl.github.io/../pdl_practice/
 
 # markdown local images
 ![](galaxy_fitting.png)
