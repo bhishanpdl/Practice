@@ -52,4 +52,4 @@ https://bhishanpdl.github.io/../pdl_practice/
 # markdown local images
 ![](galaxy_fitting.png)
 
-<img src="https://github.com/bhishanpdl/Github_Practice/blob/master/wk1_quiz1.png" alt="drawing" height="600" width="300"/>
+<img src="https://github.com/bhishanpdl/Github_Practice/blob/master/wk1_quiz1.png" alt="drawing" height="1600" width="1000"/>
