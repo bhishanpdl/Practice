@@ -1,0 +1,762 @@
+---
+redirect_from:
+  - "c07-regression-modelling-select-kbest"
+interact_link: content/c07_regression_modelling_select_kbest.ipynb
+kernel_name: datasc
+kernel_path: content
+has_widgets: false
+title: |-
+  C07 Regression Modelling Select Kbest
+pagenum: 10
+prev_page:
+  url: /c02_regression_modelling_linear_ols_statsmodels.html
+next_page:
+  url: /b02_regression_data_visualization_and_eda_bokeh.html
+suffix: .ipynb
+search: k adjusted r squared value test span toc class best search href data modified id item numnbspnbsp grid lilispana polynomial features select kbest scripts script random forest parameters modelling imports useful single searching div htable contentsspan tocskip h tocul itemlispana spanmodelling spanimports spanuseful spansingle spansearching spangrid spanuse li ul
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">C07 Regression Modelling Select Kbest</div>
+</div>
+    <div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><h1>Table of Contents<span class="tocSkip"></span></h1></p>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Modelling-with-Polynomial-Features-and-Select-Kbest" data-toc-modified-id="Modelling-with-Polynomial-Features-and-Select-Kbest-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Modelling with Polynomial Features and Select Kbest</a></span></li><li><span><a href="#Imports" data-toc-modified-id="Imports-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Imports</a></span></li><li><span><a href="#Useful-Scripts" data-toc-modified-id="Useful-Scripts-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Useful Scripts</a></span></li><li><span><a href="#Single-Script" data-toc-modified-id="Single-Script-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Single Script</a></span></li><li><span><a href="#Searching-Best-k" data-toc-modified-id="Searching-Best-k-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Searching Best k</a></span></li><li><span><a href="#Grid-Search-for-Random-Forest" data-toc-modified-id="Grid-Search-for-Random-Forest-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Grid Search for Random Forest</a></span></li><li><span><a href="#Use-the-best-parameters-from-grid-search" data-toc-modified-id="Use-the-best-parameters-from-grid-search-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>Use the best parameters from grid search</a></span></li></ul></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Modelling-with-Polynomial-Features-and-Select-Kbest">Modelling with Polynomial Features and Select Kbest<a class="anchor-link" href="#Modelling-with-Polynomial-Features-and-Select-Kbest"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Imports">Imports<a class="anchor-link" href="#Imports"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+
+<span class="kn">import</span> <span class="nn">sklearn</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">mean_squared_error</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">cross_val_score</span>
+<span class="kn">from</span> <span class="nn">sklearn.feature_selection</span> <span class="k">import</span> <span class="n">SelectKBest</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="k">import</span> <span class="n">LinearRegression</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestRegressor</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">r2_score</span>
+
+<span class="c1"># random state</span>
+<span class="n">random_state</span><span class="o">=</span><span class="mi">100</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span> <span class="c1"># we need this in each cell</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_state</span><span class="o">=</span><span class="n">random_state</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Useful-Scripts">Useful Scripts<a class="anchor-link" href="#Useful-Scripts"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">adjustedR2</span><span class="p">(</span><span class="n">rsquared</span><span class="p">,</span><span class="n">nrows</span><span class="p">,</span><span class="n">kcols</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">rsquared</span><span class="o">-</span> <span class="p">(</span><span class="n">kcols</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">nrows</span><span class="o">-</span><span class="n">kcols</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">rsquared</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">add_interactions</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">combinations</span>
+    <span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">PolynomialFeatures</span>
+
+    <span class="c1"># Get feature names</span>
+    <span class="n">combos</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">combinations</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">colnames</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">combos</span><span class="p">]</span>
+    
+    <span class="c1"># Find interactions</span>
+    <span class="n">poly</span> <span class="o">=</span> <span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">interaction_only</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">include_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">poly</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">colnames</span>
+    
+    <span class="c1"># Remove interaction terms with all 0 values            </span>
+    <span class="n">noint_indicies</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">list</span><span class="p">((</span><span class="n">df</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()))</span> <span class="k">if</span> <span class="n">x</span><span class="p">]</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">noint_indicies</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">df</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Single-Script">Single Script<a class="anchor-link" href="#Single-Script"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># data</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/processed/data_cleaned_encoded.csv&#39;</span><span class="p">)</span>
+
+<span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bedrooms&#39;</span><span class="p">,</span> <span class="s1">&#39;bathrooms&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_living&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_lot&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_above&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_basement&#39;</span><span class="p">,</span> <span class="s1">&#39;yr_built&#39;</span><span class="p">,</span> <span class="s1">&#39;yr_renovated&#39;</span><span class="p">,</span> <span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;long&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_living15&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_lot15&#39;</span><span class="p">,</span> <span class="s1">&#39;yr_sales&#39;</span><span class="p">,</span> <span class="s1">&#39;basement_bool&#39;</span><span class="p">,</span> <span class="s1">&#39;renovation_bool&#39;</span><span class="p">,</span> <span class="s1">&#39;zipcode_houses&#39;</span><span class="p">,</span> <span class="s1">&#39;waterfront_0&#39;</span><span class="p">,</span> <span class="s1">&#39;waterfront_1&#39;</span><span class="p">,</span> <span class="s1">&#39;view_0&#39;</span><span class="p">,</span> <span class="s1">&#39;view_1&#39;</span><span class="p">,</span> <span class="s1">&#39;view_2&#39;</span><span class="p">,</span> <span class="s1">&#39;view_3&#39;</span><span class="p">,</span> <span class="s1">&#39;view_4&#39;</span><span class="p">,</span> <span class="s1">&#39;condition_1&#39;</span><span class="p">,</span> <span class="s1">&#39;condition_2&#39;</span><span class="p">,</span> <span class="s1">&#39;condition_3&#39;</span><span class="p">,</span> <span class="s1">&#39;condition_4&#39;</span><span class="p">,</span> <span class="s1">&#39;condition_5&#39;</span><span class="p">,</span> <span class="s1">&#39;grade_1&#39;</span><span class="p">,</span> <span class="s1">&#39;grade_10&#39;</span><span class="p">,</span> <span class="s1">&#39;grade_11&#39;</span><span class="p">,</span> <span class="s1">&#39;grade_12&#39;</span><span class="p">,</span> <span class="s1">&#39;grade_13&#39;</span><span class="p">,</span> <span class="s1">&#39;grade_3&#39;</span><span class="p">,</span> <span class="s1">&#39;grade_4&#39;</span><span class="p">,</span> <span class="s1">&#39;grade_5&#39;</span><span class="p">,</span> <span class="s1">&#39;grade_6&#39;</span><span class="p">,</span> <span class="s1">&#39;grade_7&#39;</span><span class="p">,</span> <span class="s1">&#39;grade_8&#39;</span><span class="p">,</span> <span class="s1">&#39;grade_9&#39;</span><span class="p">,</span> <span class="s1">&#39;zipcode_top10_98004&#39;</span><span class="p">,</span> <span class="s1">&#39;zipcode_top10_98006&#39;</span><span class="p">,</span> <span class="s1">&#39;zipcode_top10_98033&#39;</span><span class="p">,</span> <span class="s1">&#39;zipcode_top10_98039&#39;</span><span class="p">,</span> <span class="s1">&#39;zipcode_top10_98040&#39;</span><span class="p">,</span> <span class="s1">&#39;zipcode_top10_98102&#39;</span><span class="p">,</span> <span class="s1">&#39;zipcode_top10_98105&#39;</span><span class="p">,</span> <span class="s1">&#39;zipcode_top10_98155&#39;</span><span class="p">,</span> <span class="s1">&#39;zipcode_top10_98177&#39;</span><span class="p">,</span> <span class="s1">&#39;age_cat_0&#39;</span><span class="p">,</span> <span class="s1">&#39;age_cat_1&#39;</span><span class="p">,</span> <span class="s1">&#39;age_cat_2&#39;</span><span class="p">,</span> <span class="s1">&#39;age_cat_3&#39;</span><span class="p">,</span> <span class="s1">&#39;age_cat_4&#39;</span><span class="p">,</span> <span class="s1">&#39;age_cat_5&#39;</span><span class="p">,</span> <span class="s1">&#39;age_cat_6&#39;</span><span class="p">,</span> <span class="s1">&#39;age_cat_7&#39;</span><span class="p">,</span> <span class="s1">&#39;age_cat_8&#39;</span><span class="p">,</span> <span class="s1">&#39;age_cat_9&#39;</span><span class="p">,</span> <span class="s1">&#39;age_after_renovation_cat_0&#39;</span><span class="p">,</span> <span class="s1">&#39;age_after_renovation_cat_1&#39;</span><span class="p">,</span> <span class="s1">&#39;age_after_renovation_cat_2&#39;</span><span class="p">,</span> <span class="s1">&#39;age_after_renovation_cat_3&#39;</span><span class="p">,</span> <span class="s1">&#39;age_after_renovation_cat_4&#39;</span><span class="p">,</span> <span class="s1">&#39;age_after_renovation_cat_5&#39;</span><span class="p">,</span> <span class="s1">&#39;age_after_renovation_cat_6&#39;</span><span class="p">,</span> <span class="s1">&#39;age_after_renovation_cat_7&#39;</span><span class="p">,</span> <span class="s1">&#39;age_after_renovation_cat_8&#39;</span><span class="p">,</span> <span class="s1">&#39;age_after_renovation_cat_9&#39;</span><span class="p">]</span>
+
+<span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span>
+
+<span class="c1"># add interaction features to X (excluding target)</span>
+<span class="n">df_Xlarge</span> <span class="o">=</span> <span class="n">add_interactions</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">features</span><span class="p">])</span>
+<span class="n">df_large</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_Xlarge</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># train test split of very large dataframe</span>
+<span class="n">df_train_large</span><span class="p">,</span> <span class="n">df_test_large</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df_large</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+                                                 <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
+
+<span class="c1"># fit the select KBest on training data to get best features</span>
+<span class="k">def</span> <span class="nf">regression_modelling_with_kbest</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+    <span class="n">model_kbest</span> <span class="o">=</span> <span class="n">SelectKBest</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+    <span class="n">model_kbest</span> <span class="o">=</span> <span class="n">model_kbest</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df_train_large</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
+                                  <span class="n">df_train_large</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
+
+    <span class="n">idx_kbest</span> <span class="o">=</span> <span class="n">model_kbest</span><span class="o">.</span><span class="n">get_support</span><span class="p">(</span><span class="n">indices</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">cols_kbest</span> <span class="o">=</span> <span class="p">[</span><span class="n">df_train_large</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx_kbest</span><span class="p">]</span>
+
+
+    <span class="c1"># get numpy arrays using best features</span>
+    <span class="n">Xtrain_kbest</span> <span class="o">=</span> <span class="n">df_train_large</span><span class="p">[</span><span class="n">cols_kbest</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">ytrain_kbest</span> <span class="o">=</span> <span class="n">df_train_large</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+    <span class="n">Xtest_kbest</span> <span class="o">=</span> <span class="n">df_test_large</span><span class="p">[</span><span class="n">cols_kbest</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">ytest_kbest</span> <span class="o">=</span> <span class="n">df_test_large</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+
+    <span class="c1"># model</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                                 <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c1"># model = LinearRegression()</span>
+
+    <span class="c1"># fitting</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xtrain_kbest</span><span class="p">,</span><span class="n">ytrain_kbest</span><span class="p">)</span>
+
+    <span class="c1"># prediction</span>
+    <span class="n">ypreds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Xtest_kbest</span><span class="p">)</span>
+
+    <span class="c1"># model evaluation</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">ytest_kbest</span><span class="p">,</span><span class="n">ypreds</span><span class="p">)</span>
+    <span class="n">ar2</span> <span class="o">=</span> <span class="n">adjustedR2</span><span class="p">(</span><span class="n">r2</span><span class="p">,</span><span class="n">Xtest_kbest</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">Xtest_kbest</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;k = &#39;</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="c1">#print(&#39;R-squared Value for Test = &#39;, round(r2,3))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Adjusted R-squared Value for Test = &#39;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">ar2</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Searching-Best-k">Searching Best k<a class="anchor-link" href="#Searching-Best-k"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">441</span><span class="p">]:</span>
+    <span class="n">regression_modelling_with_kbest</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>k =  443
+Adjusted R-squared Value for Test =  0.861
+k =  444
+Adjusted R-squared Value for Test =  0.857
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code>k =  400
+Adjusted R-squared Value for Test =  0.828
+
+k =  420
+Adjusted R-squared Value for Test =  0.853
+
+k =  430
+Adjusted R-squared Value for Test =  0.859
+
+k =  438
+Adjusted R-squared Value for Test =  0.86
+
+k =  439
+Adjusted R-squared Value for Test =  0.858
+
+k =  440
+Adjusted R-squared Value for Test =  0.86
+
+k =  441
+Adjusted R-squared Value for Test =  0.862
+
+k =  442
+Adjusted R-squared Value for Test =  0.859
+
+k =  443
+Adjusted R-squared Value for Test =  0.861
+
+k =  444
+Adjusted R-squared Value for Test =  0.857
+
+k =  445
+Adjusted R-squared Value for Test =  0.855
+
+k =  460
+Adjusted R-squared Value for Test =  0.858
+
+k =  480
+Adjusted R-squared Value for Test =  0.855
+
+k =  500
+Adjusted R-squared Value for Test =  0.857
+
+k =  600
+Adjusted R-squared Value for Test =  0.853
+
+k =  620
+Adjusted R-squared Value for Test =  0.854
+
+k =  640
+Adjusted R-squared Value for Test =  0.849
+
+k =  660
+Adjusted R-squared Value for Test =  0.851
+
+k =  680
+Adjusted R-squared Value for Test =  0.847
+
+k =  700
+Adjusted R-squared Value for Test =  0.85</code></pre>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">k</span> <span class="o">=</span> <span class="mi">441</span>
+<span class="n">model_kbest</span> <span class="o">=</span> <span class="n">SelectKBest</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+<span class="n">model_kbest</span> <span class="o">=</span> <span class="n">model_kbest</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df_train_large</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
+                              <span class="n">df_train_large</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
+
+<span class="n">idx_kbest</span> <span class="o">=</span> <span class="n">model_kbest</span><span class="o">.</span><span class="n">get_support</span><span class="p">(</span><span class="n">indices</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">cols_kbest</span> <span class="o">=</span> <span class="p">[</span><span class="n">df_train_large</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx_kbest</span><span class="p">]</span>
+
+
+<span class="c1"># get numpy arrays using best features</span>
+<span class="n">Xtrain_kbest</span> <span class="o">=</span> <span class="n">df_train_large</span><span class="p">[</span><span class="n">cols_kbest</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">ytrain_kbest</span> <span class="o">=</span> <span class="n">df_train_large</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+<span class="n">Xtest_kbest</span> <span class="o">=</span> <span class="n">df_test_large</span><span class="p">[</span><span class="n">cols_kbest</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">ytest_kbest</span> <span class="o">=</span> <span class="n">df_test_large</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    
+<span class="c1"># model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                             <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># fitting</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xtrain_kbest</span><span class="p">,</span><span class="n">ytrain_kbest</span><span class="p">)</span>
+
+<span class="c1"># prediction</span>
+<span class="n">ypreds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Xtest_kbest</span><span class="p">)</span>
+
+<span class="c1"># model evaluation</span>
+<span class="n">r2</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">ytest_kbest</span><span class="p">,</span><span class="n">ypreds</span><span class="p">)</span>
+<span class="n">ar2</span> <span class="o">=</span> <span class="n">adjustedR2</span><span class="p">(</span><span class="n">r2</span><span class="p">,</span><span class="n">Xtest_kbest</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">Xtest_kbest</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;k = &#39;</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+<span class="c1">#print(&#39;R-squared Value for Test = &#39;, round(r2,3))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Adjusted R-squared Value for Test = &#39;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">ar2</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>k =  441
+Adjusted R-squared Value for Test =  0.862
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Grid-Search-for-Random-Forest">Grid Search for Random Forest<a class="anchor-link" href="#Grid-Search-for-Random-Forest"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">RandomizedSearchCV</span>
+
+<span class="n">t0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">)</span>
+
+
+<span class="n">param_dist</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">40</span><span class="p">,</span><span class="mi">60</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">120</span><span class="p">,</span><span class="mi">140</span><span class="p">],</span>
+ <span class="s1">&#39;max_features&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">],</span> 
+ <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+ <span class="s1">&#39;bootstrap&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]}</span>
+
+<span class="n">grid_search_forest</span> <span class="o">=</span> <span class="n">RandomizedSearchCV</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">param_distributions</span><span class="o">=</span><span class="n">param_dist</span><span class="p">,</span>
+                                        <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                        <span class="n">iid</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                        <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                                        <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;r2&#39;</span><span class="p">,</span>
+                                        <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">grid_search_forest</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xtrain_kbest</span><span class="p">,</span> <span class="n">ytrain_kbest</span><span class="p">)</span>
+
+<span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t0</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Time taken: </span><span class="si">{:.0f}</span><span class="s1"> min </span><span class="si">{:.0f}</span><span class="s1"> secs&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="nb">divmod</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span><span class="mi">60</span><span class="p">)))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Fitting 5 folds for each of 10 candidates, totalling 50 fits
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[Parallel(n_jobs=-1)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=-1)]: Done  42 tasks      | elapsed:   32.2s
+[Parallel(n_jobs=-1)]: Done  50 out of  50 | elapsed:   36.6s finished
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Time taken: 0 min 40 secs
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># from sklearn.model_selection import GridSearchCV</span>
+
+<span class="c1"># t0 = time.time()</span>
+
+<span class="c1"># model = RandomForestRegressor(random_state=random_state)</span>
+
+
+<span class="c1"># param_grid = [</span>
+<span class="c1"># {&#39;n_estimators&#39;: [40,60,80,100,120,140],</span>
+<span class="c1">#  &#39;max_features&#39;: [2,10,20], </span>
+<span class="c1">#  &#39;max_depth&#39;: [10, 50, None],</span>
+<span class="c1">#  &#39;bootstrap&#39;: [True, False]}</span>
+<span class="c1"># ]</span>
+
+<span class="c1"># grid_search_forest = GridSearchCV(model,</span>
+<span class="c1">#                                   param_grid,</span>
+<span class="c1">#                                   cv=5,</span>
+<span class="c1">#                                   n_jobs=-1,</span>
+<span class="c1">#                                   scoring=&#39;r2&#39;,</span>
+<span class="c1">#                                   verbose=1)</span>
+
+<span class="c1"># grid_search_forest.fit(Xtrain_kbest, ytrain_kbest)</span>
+
+<span class="c1"># t1 = time.time() - t0</span>
+<span class="c1"># print(&#39;Time taken: {:.0f} min {:.0f} secs&#39;.format(*divmod(t1,60)))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Use-the-best-parameters-from-grid-search">Use the best parameters from grid search<a class="anchor-link" href="#Use-the-best-parameters-from-grid-search"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">grid_search_forest</span><span class="o">.</span><span class="n">best_estimator_</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>RandomForestRegressor(bootstrap=False, criterion=&#39;mse&#39;, max_depth=50,
+                      max_features=20, max_leaf_nodes=None,
+                      min_impurity_decrease=0.0, min_impurity_split=None,
+                      min_samples_leaf=1, min_samples_split=2,
+                      min_weight_fraction_leaf=0.0, n_estimators=40,
+                      n_jobs=None, oob_score=False, random_state=100, verbose=0,
+                      warm_start=False)</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">grid_search_forest</span><span class="o">.</span><span class="n">best_params_</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;n_estimators&#39;: 40, &#39;max_features&#39;: 20, &#39;max_depth&#39;: 50, &#39;bootstrap&#39;: False}</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">k</span> <span class="o">=</span> <span class="mi">441</span>
+<span class="n">model_kbest</span> <span class="o">=</span> <span class="n">SelectKBest</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+<span class="n">model_kbest</span> <span class="o">=</span> <span class="n">model_kbest</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df_train_large</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
+                              <span class="n">df_train_large</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
+
+<span class="n">idx_kbest</span> <span class="o">=</span> <span class="n">model_kbest</span><span class="o">.</span><span class="n">get_support</span><span class="p">(</span><span class="n">indices</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">cols_kbest</span> <span class="o">=</span> <span class="p">[</span><span class="n">df_train_large</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx_kbest</span><span class="p">]</span>
+
+
+<span class="c1"># get numpy arrays using best features</span>
+<span class="n">Xtrain_kbest</span> <span class="o">=</span> <span class="n">df_train_large</span><span class="p">[</span><span class="n">cols_kbest</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">ytrain_kbest</span> <span class="o">=</span> <span class="n">df_train_large</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+<span class="n">Xtest_kbest</span> <span class="o">=</span> <span class="n">df_test_large</span><span class="p">[</span><span class="n">cols_kbest</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">ytest_kbest</span> <span class="o">=</span> <span class="n">df_test_large</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    
+<span class="c1"># model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                             <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                             <span class="n">max_features</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                             <span class="n">max_depth</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                             <span class="n">bootstrap</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># fitting</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xtrain_kbest</span><span class="p">,</span><span class="n">ytrain_kbest</span><span class="p">)</span>
+
+<span class="c1"># prediction</span>
+<span class="n">ypreds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Xtest_kbest</span><span class="p">)</span>
+
+<span class="c1"># model evaluation</span>
+<span class="n">r2</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">ytest_kbest</span><span class="p">,</span><span class="n">ypreds</span><span class="p">)</span>
+<span class="n">ar2</span> <span class="o">=</span> <span class="n">adjustedR2</span><span class="p">(</span><span class="n">r2</span><span class="p">,</span><span class="n">Xtest_kbest</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">Xtest_kbest</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;k = &#39;</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+<span class="c1">#print(&#39;R-squared Value for Test = &#39;, round(r2,3))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Adjusted R-squared Value for Test = &#39;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">ar2</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>k =  441
+Adjusted R-squared Value for Test =  0.814
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">k</span> <span class="o">=</span> <span class="mi">441</span>
+<span class="n">model_kbest</span> <span class="o">=</span> <span class="n">SelectKBest</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+<span class="n">model_kbest</span> <span class="o">=</span> <span class="n">model_kbest</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df_train_large</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">target</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(),</span>
+                              <span class="n">df_train_large</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
+
+<span class="n">idx_kbest</span> <span class="o">=</span> <span class="n">model_kbest</span><span class="o">.</span><span class="n">get_support</span><span class="p">(</span><span class="n">indices</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">cols_kbest</span> <span class="o">=</span> <span class="p">[</span><span class="n">df_train_large</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">idx_kbest</span><span class="p">]</span>
+
+
+<span class="c1"># get numpy arrays using best features</span>
+<span class="n">Xtrain_kbest</span> <span class="o">=</span> <span class="n">df_train_large</span><span class="p">[</span><span class="n">cols_kbest</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">ytrain_kbest</span> <span class="o">=</span> <span class="n">df_train_large</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+<span class="n">Xtest_kbest</span> <span class="o">=</span> <span class="n">df_test_large</span><span class="p">[</span><span class="n">cols_kbest</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">ytest_kbest</span> <span class="o">=</span> <span class="n">df_test_large</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    
+<span class="c1"># model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span> <span class="mi">100</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span>
+                              <span class="n">max_features</span><span class="o">=</span><span class="mi">69</span><span class="p">,</span>
+                              <span class="n">max_depth</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">bootstrap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># fitting</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xtrain_kbest</span><span class="p">,</span><span class="n">ytrain_kbest</span><span class="p">)</span>
+
+<span class="c1"># prediction</span>
+<span class="n">ypreds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Xtest_kbest</span><span class="p">)</span>
+
+<span class="c1"># model evaluation</span>
+<span class="n">r2</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">ytest_kbest</span><span class="p">,</span><span class="n">ypreds</span><span class="p">)</span>
+<span class="n">ar2</span> <span class="o">=</span> <span class="n">adjustedR2</span><span class="p">(</span><span class="n">r2</span><span class="p">,</span><span class="n">Xtest_kbest</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">Xtest_kbest</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;k = &#39;</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+<span class="c1">#print(&#39;R-squared Value for Test = &#39;, round(r2,3))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Adjusted R-squared Value for Test = &#39;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">ar2</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>k =  441
+Adjusted R-squared Value for Test =  0.843
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+ 
+
+
+    </main>
+    

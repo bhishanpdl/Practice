@@ -1,0 +1,1552 @@
+---
+redirect_from:
+  - "c04-regression-modelling-random-forest"
+interact_link: content/c04_regression_modelling_random_forest.ipynb
+kernel_name: datasc
+kernel_path: content
+has_widgets: false
+title: |-
+  C04 Regression Modelling Random Forest
+pagenum: 16
+prev_page:
+  url: /b01_regression_data_visualization_and_eda.html
+next_page:
+  url: /b05_regression_data_visualization_and_eda_with_pandas_profiling.html
+suffix: .ipynb
+search: span toc data class search href modified id item numnbspnbsp lilispana importance grid feature forest scripts random modelling best parameters using eli node imports useful load randomized points div spanfeature max min htable contentsspan tocskip h tocul itemlispana spanimports spanuseful spanload spanrandom spangrid spanuse spanrandomized li ul important hyperparameters nestimators n trees maxfeatures features considered splitting maxdepth levels decision tree minsamplessplit placed before split minsamplesleaf allowed leaf bootstrap method sampling without replacement
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">C04 Regression Modelling Random Forest</div>
+</div>
+    <div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><h1>Table of Contents<span class="tocSkip"></span></h1></p>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Imports" data-toc-modified-id="Imports-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Imports</a></span></li><li><span><a href="#Useful-Scripts" data-toc-modified-id="Useful-Scripts-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Useful Scripts</a></span></li><li><span><a href="#Load-the-data" data-toc-modified-id="Load-the-data-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Load the data</a></span></li><li><span><a href="#Random-Forest-Modelling" data-toc-modified-id="Random-Forest-Modelling-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Random Forest Modelling</a></span></li><li><span><a href="#Grid-Search" data-toc-modified-id="Grid-Search-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Grid Search</a></span></li><li><span><a href="#Use-the-best-parameters-from-grid-search" data-toc-modified-id="Use-the-best-parameters-from-grid-search-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Use the best parameters from grid search</a></span></li><li><span><a href="#Randomized-search" data-toc-modified-id="Randomized-search-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>Randomized search</a></span></li><li><span><a href="#Feature-Importance" data-toc-modified-id="Feature-Importance-8"><span class="toc-item-num">8&nbsp;&nbsp;</span>Feature Importance</a></span></li><li><span><a href="#Feature-Importance-using-eli5" data-toc-modified-id="Feature-Importance-using-eli5-9"><span class="toc-item-num">9&nbsp;&nbsp;</span>Feature Importance using eli5</a></span></li></ul></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Imports">Imports<a class="anchor-link" href="#Imports"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+
+<span class="c1"># random state</span>
+<span class="n">random_state</span><span class="o">=</span><span class="mi">100</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span> <span class="c1"># we need this in each cell</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_state</span><span class="o">=</span><span class="n">random_state</span>
+
+<span class="kn">import</span> <span class="nn">sklearn</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="k">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="k">import</span> <span class="n">RandomForestRegressor</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="k">import</span> <span class="n">mean_squared_error</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">cross_val_score</span>
+
+<span class="kn">import</span> <span class="nn">pickle</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Useful-Scripts">Useful Scripts<a class="anchor-link" href="#Useful-Scripts"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">show_method_attributes</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">inside</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Show all the attributes of a given method.</span>
+<span class="sd">    Example:</span>
+<span class="sd">    ========</span>
+<span class="sd">    show_method_attributes(list)</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+    <span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="k">if</span> <span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;_&#39;</span> <span class="p">]</span>
+    <span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">lst</span> 
+           <span class="k">if</span> <span class="n">elem</span> <span class="ow">not</span> <span class="ow">in</span> <span class="s1">&#39;os np pd sys time psycopg2&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
+        <span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">start</span><span class="p">)]</span>
+        
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+        <span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">for</span> <span class="n">start_elem</span> <span class="ow">in</span> <span class="n">start</span>
+               <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">start_elem</span><span class="p">)]</span>
+        
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inside</span><span class="p">,</span><span class="nb">str</span><span class="p">):</span>
+        <span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">if</span> <span class="n">inside</span> <span class="ow">in</span> <span class="n">elem</span><span class="p">]</span>
+        
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inside</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inside</span><span class="p">,</span><span class="nb">list</span><span class="p">):</span>
+        <span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">for</span> <span class="n">inside_elem</span> <span class="ow">in</span> <span class="n">inside</span>
+               <span class="k">if</span> <span class="n">inside_elem</span> <span class="ow">in</span> <span class="n">elem</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">lst</span><span class="p">,</span><span class="n">ncols</span><span class="p">))</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">adjustedR2</span><span class="p">(</span><span class="n">rsquared</span><span class="p">,</span><span class="n">nrows</span><span class="p">,</span><span class="n">kcols</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">rsquared</span><span class="o">-</span> <span class="p">(</span><span class="n">kcols</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">nrows</span><span class="o">-</span><span class="n">kcols</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">rsquared</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">multiple_linear_regression</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="n">features</span><span class="p">,</span><span class="n">target</span><span class="p">,</span><span class="n">model</span><span class="p">,</span>
+                               <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Multiple Linear Regression Modelling using given model.</span>
+<span class="sd">    </span>
+<span class="sd">    Depends:</span>
+<span class="sd">    Depends on function adjusted r-squared.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    Returns:</span>
+<span class="sd">    rmse, r2_train, ar2_train, r2_test, ar2_test, cv</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># train test split</span>
+    <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+    <span class="c1"># train test values</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">features</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+    <span class="n">Xtrain</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">features</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">ytrain</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+    <span class="n">Xtest</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="n">features</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">ytest</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+    
+    <span class="c1"># fitting</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xtrain</span><span class="p">,</span><span class="n">ytrain</span><span class="p">)</span>
+
+    <span class="c1"># prediction</span>
+    <span class="n">ypreds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">Xtest</span><span class="p">)</span>
+
+    <span class="c1"># metrics</span>
+    <span class="n">rmse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">ytest</span><span class="p">,</span><span class="n">ypreds</span><span class="p">))</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">r2_train</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">Xtrain</span><span class="p">,</span> <span class="n">ytrain</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">r2_test</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">Xtest</span><span class="p">,</span> <span class="n">ytest</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="n">cv</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                         <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="n">ar2_train</span> <span class="o">=</span> <span class="n">adjustedR2</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">Xtrain</span><span class="p">,</span><span class="n">ytrain</span><span class="p">),</span>
+                           <span class="n">Xtrain</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                           <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">))</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">ar2_test</span>  <span class="o">=</span> <span class="n">adjustedR2</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">Xtest</span><span class="p">,</span><span class="n">ytest</span><span class="p">),</span>
+                           <span class="n">Xtest</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">,</span>
+                           <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">))</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="p">(</span><span class="n">rmse</span><span class="p">,</span> <span class="n">r2_train</span><span class="p">,</span> <span class="n">ar2_train</span><span class="p">,</span> <span class="n">r2_test</span><span class="p">,</span> <span class="n">ar2_test</span><span class="p">,</span> <span class="n">cv</span><span class="p">)</span>
+
+
+<span class="n">df_eval</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Model&#39;</span><span class="p">:</span> <span class="p">[],</span>
+                           <span class="s1">&#39;Details&#39;</span><span class="p">:[],</span>
+                           <span class="s1">&#39;Root Mean Squared Error (RMSE)&#39;</span><span class="p">:[],</span>
+                           <span class="s1">&#39;R-squared (training)&#39;</span><span class="p">:[],</span>
+                           <span class="s1">&#39;Adjusted R-squared (training)&#39;</span><span class="p">:[],</span>
+                           <span class="s1">&#39;R-squared (test)&#39;</span><span class="p">:[],</span>
+                           <span class="s1">&#39;Adjusted R-squared (test)&#39;</span><span class="p">:[],</span>
+                           <span class="s1">&#39;5-Fold Cross Validation&#39;</span><span class="p">:[]})</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Load-the-data">Load the data<a class="anchor-link" href="#Load-the-data"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/raw/kc_house_data.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="s1">&#39;date&#39;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>price</th>
+      <th>bedrooms</th>
+      <th>bathrooms</th>
+      <th>sqft_living</th>
+      <th>sqft_lot</th>
+      <th>floors</th>
+      <th>waterfront</th>
+      <th>view</th>
+      <th>condition</th>
+      <th>grade</th>
+      <th>sqft_above</th>
+      <th>sqft_basement</th>
+      <th>yr_built</th>
+      <th>yr_renovated</th>
+      <th>zipcode</th>
+      <th>lat</th>
+      <th>long</th>
+      <th>sqft_living15</th>
+      <th>sqft_lot15</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>221900.0</td>
+      <td>3</td>
+      <td>1.00</td>
+      <td>1180</td>
+      <td>5650</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>7</td>
+      <td>1180</td>
+      <td>0</td>
+      <td>1955</td>
+      <td>0</td>
+      <td>98178</td>
+      <td>47.5112</td>
+      <td>-122.257</td>
+      <td>1340</td>
+      <td>5650</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>538000.0</td>
+      <td>3</td>
+      <td>2.25</td>
+      <td>2570</td>
+      <td>7242</td>
+      <td>2.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>7</td>
+      <td>2170</td>
+      <td>400</td>
+      <td>1951</td>
+      <td>1991</td>
+      <td>98125</td>
+      <td>47.7210</td>
+      <td>-122.319</td>
+      <td>1690</td>
+      <td>7639</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>180000.0</td>
+      <td>2</td>
+      <td>1.00</td>
+      <td>770</td>
+      <td>10000</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>6</td>
+      <td>770</td>
+      <td>0</td>
+      <td>1933</td>
+      <td>0</td>
+      <td>98028</td>
+      <td>47.7379</td>
+      <td>-122.233</td>
+      <td>2720</td>
+      <td>8062</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>604000.0</td>
+      <td>4</td>
+      <td>3.00</td>
+      <td>1960</td>
+      <td>5000</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>5</td>
+      <td>7</td>
+      <td>1050</td>
+      <td>910</td>
+      <td>1965</td>
+      <td>0</td>
+      <td>98136</td>
+      <td>47.5208</td>
+      <td>-122.393</td>
+      <td>1360</td>
+      <td>5000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>510000.0</td>
+      <td>3</td>
+      <td>2.00</td>
+      <td>1680</td>
+      <td>8080</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>8</td>
+      <td>1680</td>
+      <td>0</td>
+      <td>1987</td>
+      <td>0</td>
+      <td>98074</td>
+      <td>47.6168</td>
+      <td>-122.045</td>
+      <td>1800</td>
+      <td>7503</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Random-Forest-Modelling">Random Forest Modelling<a class="anchor-link" href="#Random-Forest-Modelling"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">target</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span>
+<span class="n">features</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;price&#39;</span><span class="p">],</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span> <span class="mi">50</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="n">rmse</span><span class="p">,</span> <span class="n">r2_train</span><span class="p">,</span> <span class="n">ar2_train</span><span class="p">,</span> <span class="n">r2_test</span><span class="p">,</span> <span class="n">ar2_test</span><span class="p">,</span> <span class="n">cv</span> <span class="o">=</span> \
+    <span class="n">multiple_linear_regression</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span><span class="n">model</span><span class="p">,</span>
+                               <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+
+<span class="n">df_eval</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">df_eval</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Random Forest Regressor&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">rmse</span><span class="p">,</span><span class="n">r2_train</span><span class="p">,</span><span class="n">ar2_train</span><span class="p">,</span>
+                             <span class="n">r2_test</span><span class="p">,</span><span class="n">ar2_test</span><span class="p">,</span><span class="n">cv</span><span class="p">]</span>
+
+
+<span class="n">df_eval</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Model</th>
+      <th>Details</th>
+      <th>Root Mean Squared Error (RMSE)</th>
+      <th>R-squared (training)</th>
+      <th>Adjusted R-squared (training)</th>
+      <th>R-squared (test)</th>
+      <th>Adjusted R-squared (test)</th>
+      <th>5-Fold Cross Validation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Random Forest Regressor</td>
+      <td></td>
+      <td>125316.711</td>
+      <td>0.981</td>
+      <td>0.981</td>
+      <td>0.883</td>
+      <td>0.883</td>
+      <td>0.872</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Grid-Search">Grid Search<a class="anchor-link" href="#Grid-Search"> </a></h1><p>Most important hyperparameters of Random Forest:</p>
+<ul>
+<li>n_estimators = n of trees</li>
+<li>max_features = max number of features considered for splitting a node</li>
+<li>max_depth = max number of levels in each decision tree</li>
+<li>min_samples_split = min number of data points placed in a node before the node is split</li>
+<li>min_samples_leaf = min number of data points allowed in a leaf node</li>
+<li>bootstrap = method for sampling data points (with or without replacement)</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># train test split</span>
+<span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># train test values</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">features</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+<span class="n">Xtrain</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">features</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">ytrain</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+
+<span class="n">Xtest</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="n">features</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">ytest</span> <span class="o">=</span> <span class="n">test</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">GridSearchCV</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span><span class="p">,</span><span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="n">param_grid</span> <span class="o">=</span> <span class="p">[</span>
+<span class="p">{</span><span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">10</span><span class="p">),</span>
+ <span class="s1">&#39;max_features&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;sqrt&#39;</span><span class="p">,</span> <span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">)],</span> 
+ <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span>
+ <span class="s1">&#39;min_samples_split&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">],</span>
+ <span class="s1">&#39;min_samples_leaf&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span>
+ <span class="s1">&#39;bootstrap&#39;</span><span class="p">:</span> <span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">]}</span>
+<span class="p">]</span>
+
+<span class="n">grid_search_forest</span> <span class="o">=</span> <span class="n">GridSearchCV</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
+                                  <span class="n">param_grid</span><span class="p">,</span>
+                                  <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                  <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+                                  <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_squared_error&#39;</span><span class="p">,</span>
+                                  <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">grid_search_forest</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xtrain</span><span class="p">,</span> <span class="n">ytrain</span><span class="p">)</span>
+<span class="c1"># this takes very long time, comment this after use</span>
+<span class="c1"># save the pickled result and load the pickle.</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Fitting 5 folds for each of 1296 candidates, totalling 6480 fits
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[Parallel(n_jobs=-1)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=-1)]: Done  33 tasks      | elapsed:    9.8s
+[Parallel(n_jobs=-1)]: Done 154 tasks      | elapsed:   43.7s
+[Parallel(n_jobs=-1)]: Done 357 tasks      | elapsed:  1.7min
+[Parallel(n_jobs=-1)]: Done 640 tasks      | elapsed:  6.8min
+[Parallel(n_jobs=-1)]: Done 1005 tasks      | elapsed: 13.1min
+[Parallel(n_jobs=-1)]: Done 1450 tasks      | elapsed: 17.0min
+[Parallel(n_jobs=-1)]: Done 1977 tasks      | elapsed: 31.3min
+[Parallel(n_jobs=-1)]: Done 2584 tasks      | elapsed: 41.1min
+[Parallel(n_jobs=-1)]: Done 3273 tasks      | elapsed: 59.3min
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">KeyboardInterrupt</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;timed exec&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/dataSc/lib/python3.7/site-packages/sklearn/model_selection/_search.py</span> in <span class="ansi-cyan-fg">fit</span><span class="ansi-blue-fg">(self, X, y, groups, **fit_params)</span>
+<span class="ansi-green-intense-fg ansi-bold">    685</span>                 <span class="ansi-green-fg">return</span> results
+<span class="ansi-green-intense-fg ansi-bold">    686</span> 
+<span class="ansi-green-fg">--&gt; 687</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>_run_search<span class="ansi-blue-fg">(</span>evaluate_candidates<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    688</span> 
+<span class="ansi-green-intense-fg ansi-bold">    689</span>         <span class="ansi-red-fg"># For multi-metric evaluation, store the best_index_, best_params_ and</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/dataSc/lib/python3.7/site-packages/sklearn/model_selection/_search.py</span> in <span class="ansi-cyan-fg">_run_search</span><span class="ansi-blue-fg">(self, evaluate_candidates)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1146</span>     <span class="ansi-green-fg">def</span> _run_search<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> evaluate_candidates<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1147</span>         <span class="ansi-blue-fg">&#34;&#34;&#34;Search all candidates in param_grid&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">-&gt; 1148</span><span class="ansi-red-fg">         </span>evaluate_candidates<span class="ansi-blue-fg">(</span>ParameterGrid<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>param_grid<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1149</span> 
+<span class="ansi-green-intense-fg ansi-bold">   1150</span> 
+
+<span class="ansi-green-fg">~/miniconda3/envs/dataSc/lib/python3.7/site-packages/sklearn/model_selection/_search.py</span> in <span class="ansi-cyan-fg">evaluate_candidates</span><span class="ansi-blue-fg">(candidate_params)</span>
+<span class="ansi-green-intense-fg ansi-bold">    664</span>                                <span class="ansi-green-fg">for</span> parameters<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">(</span>train<span class="ansi-blue-fg">,</span> test<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    665</span>                                in product(candidate_params,
+<span class="ansi-green-fg">--&gt; 666</span><span class="ansi-red-fg">                                           cv.split(X, y, groups)))
+</span><span class="ansi-green-intense-fg ansi-bold">    667</span> 
+<span class="ansi-green-intense-fg ansi-bold">    668</span>                 <span class="ansi-green-fg">if</span> len<span class="ansi-blue-fg">(</span>out<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">&lt;</span> <span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/dataSc/lib/python3.7/site-packages/joblib/parallel.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, iterable)</span>
+<span class="ansi-green-intense-fg ansi-bold">    932</span> 
+<span class="ansi-green-intense-fg ansi-bold">    933</span>             <span class="ansi-green-fg">with</span> self<span class="ansi-blue-fg">.</span>_backend<span class="ansi-blue-fg">.</span>retrieval_context<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 934</span><span class="ansi-red-fg">                 </span>self<span class="ansi-blue-fg">.</span>retrieve<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    935</span>             <span class="ansi-red-fg"># Make sure that we get a last message telling us we are done</span>
+<span class="ansi-green-intense-fg ansi-bold">    936</span>             elapsed_time <span class="ansi-blue-fg">=</span> time<span class="ansi-blue-fg">.</span>time<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">-</span> self<span class="ansi-blue-fg">.</span>_start_time
+
+<span class="ansi-green-fg">~/miniconda3/envs/dataSc/lib/python3.7/site-packages/joblib/parallel.py</span> in <span class="ansi-cyan-fg">retrieve</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    831</span>             <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    832</span>                 <span class="ansi-green-fg">if</span> getattr<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_backend<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">&#39;supports_timeout&#39;</span><span class="ansi-blue-fg">,</span> <span class="ansi-green-fg">False</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 833</span><span class="ansi-red-fg">                     </span>self<span class="ansi-blue-fg">.</span>_output<span class="ansi-blue-fg">.</span>extend<span class="ansi-blue-fg">(</span>job<span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span>timeout<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>timeout<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    834</span>                 <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    835</span>                     self<span class="ansi-blue-fg">.</span>_output<span class="ansi-blue-fg">.</span>extend<span class="ansi-blue-fg">(</span>job<span class="ansi-blue-fg">.</span>get<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/dataSc/lib/python3.7/site-packages/joblib/_parallel_backends.py</span> in <span class="ansi-cyan-fg">wrap_future_result</span><span class="ansi-blue-fg">(future, timeout)</span>
+<span class="ansi-green-intense-fg ansi-bold">    519</span>         AsyncResults.get from multiprocessing.&#34;&#34;&#34;
+<span class="ansi-green-intense-fg ansi-bold">    520</span>         <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 521</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> future<span class="ansi-blue-fg">.</span>result<span class="ansi-blue-fg">(</span>timeout<span class="ansi-blue-fg">=</span>timeout<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    522</span>         <span class="ansi-green-fg">except</span> LokyTimeoutError<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    523</span>             <span class="ansi-green-fg">raise</span> TimeoutError<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/dataSc/lib/python3.7/concurrent/futures/_base.py</span> in <span class="ansi-cyan-fg">result</span><span class="ansi-blue-fg">(self, timeout)</span>
+<span class="ansi-green-intense-fg ansi-bold">    425</span>                 <span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>__get_result<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    426</span> 
+<span class="ansi-green-fg">--&gt; 427</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>_condition<span class="ansi-blue-fg">.</span>wait<span class="ansi-blue-fg">(</span>timeout<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    428</span> 
+<span class="ansi-green-intense-fg ansi-bold">    429</span>             <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>_state <span class="ansi-green-fg">in</span> <span class="ansi-blue-fg">[</span>CANCELLED<span class="ansi-blue-fg">,</span> CANCELLED_AND_NOTIFIED<span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/dataSc/lib/python3.7/threading.py</span> in <span class="ansi-cyan-fg">wait</span><span class="ansi-blue-fg">(self, timeout)</span>
+<span class="ansi-green-intense-fg ansi-bold">    294</span>         <span class="ansi-green-fg">try</span><span class="ansi-blue-fg">:</span>    <span class="ansi-red-fg"># restore state no matter what (e.g., KeyboardInterrupt)</span>
+<span class="ansi-green-intense-fg ansi-bold">    295</span>             <span class="ansi-green-fg">if</span> timeout <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">None</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 296</span><span class="ansi-red-fg">                 </span>waiter<span class="ansi-blue-fg">.</span>acquire<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    297</span>                 gotit <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">True</span>
+<span class="ansi-green-intense-fg ansi-bold">    298</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">KeyboardInterrupt</span>: </pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;../models/grid_search_rf.pkl&#39;</span><span class="p">,</span><span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fo</span><span class="p">:</span>
+    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">grid_search_forest</span><span class="p">,</span> <span class="n">fo</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Use-the-best-parameters-from-grid-search">Use the best parameters from grid search<a class="anchor-link" href="#Use-the-best-parameters-from-grid-search"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">show_method_attributes</span><span class="p">(</span><span class="n">grid_search_forest</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>best_estimator_</td>
+      <td>cv</td>
+      <td>fit</td>
+      <td>n_jobs</td>
+      <td>predict</td>
+      <td>refit_time_</td>
+      <td>scoring</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>best_index_</td>
+      <td>cv_results_</td>
+      <td>get_params</td>
+      <td>n_splits_</td>
+      <td>predict_log_proba</td>
+      <td>return_train_score</td>
+      <td>set_params</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>best_params_</td>
+      <td>decision_function</td>
+      <td>iid</td>
+      <td>param_grid</td>
+      <td>predict_proba</td>
+      <td>score</td>
+      <td>transform</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>best_score_</td>
+      <td>error_score</td>
+      <td>inverse_transform</td>
+      <td>pre_dispatch</td>
+      <td>refit</td>
+      <td>scorer_</td>
+      <td>verbose</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>classes_</td>
+      <td>estimator</td>
+      <td>multimetric_</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_gs_rf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">grid_search_forest</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">)</span>
+<span class="n">df_gs_rf</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Index([&#39;mean_fit_time&#39;, &#39;std_fit_time&#39;, &#39;mean_score_time&#39;, &#39;std_score_time&#39;,
+       &#39;param_bootstrap&#39;, &#39;param_max_depth&#39;, &#39;param_max_features&#39;,
+       &#39;param_n_estimators&#39;, &#39;params&#39;, &#39;split0_test_score&#39;,
+       &#39;split1_test_score&#39;, &#39;split2_test_score&#39;, &#39;split3_test_score&#39;,
+       &#39;split4_test_score&#39;, &#39;mean_test_score&#39;, &#39;std_test_score&#39;,
+       &#39;rank_test_score&#39;],
+      dtype=&#39;object&#39;)</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># df_gs_rf param_max_features</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_gs_rf</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span>
+    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;param_max_features&#39;</span><span class="p">,</span><span class="s1">&#39;param_n_estimators&#39;</span><span class="p">],</span>
+    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;param_bootstrap&#39;</span><span class="p">,</span><span class="s1">&#39;param_max_depth&#39;</span><span class="p">],</span>
+    <span class="n">values</span><span class="o">=</span><span class="s1">&#39;mean_test_score&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>\
+<span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">background_gradient</span><span class="p">(</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<style  type="text/css" >
+    #T_1001e89a_09b2_11ea_a1c1_acde48001122row0_col0 {
+            background-color:  #81badb;
+            color:  #000000;
+        }    #T_1001e89a_09b2_11ea_a1c1_acde48001122row0_col1 {
+            background-color:  #2676b8;
+            color:  #000000;
+        }    #T_1001e89a_09b2_11ea_a1c1_acde48001122row0_col2 {
+            background-color:  #b4d3e9;
+            color:  #000000;
+        }    #T_1001e89a_09b2_11ea_a1c1_acde48001122row0_col3 {
+            background-color:  #3d8dc4;
+            color:  #000000;
+        }    #T_1001e89a_09b2_11ea_a1c1_acde48001122row1_col0 {
+            background-color:  #7ab6d9;
+            color:  #000000;
+        }    #T_1001e89a_09b2_11ea_a1c1_acde48001122row1_col1 {
+            background-color:  #1764ab;
+            color:  #f1f1f1;
+        }    #T_1001e89a_09b2_11ea_a1c1_acde48001122row1_col2 {
+            background-color:  #99c7e0;
+            color:  #000000;
+        }    #T_1001e89a_09b2_11ea_a1c1_acde48001122row1_col3 {
+            background-color:  #2a7ab9;
+            color:  #000000;
+        }    #T_1001e89a_09b2_11ea_a1c1_acde48001122row2_col0 {
+            background-color:  #d6e5f4;
+            color:  #000000;
+        }    #T_1001e89a_09b2_11ea_a1c1_acde48001122row2_col1 {
+            background-color:  #f7fbff;
+            color:  #000000;
+        }    #T_1001e89a_09b2_11ea_a1c1_acde48001122row2_col2 {
+            background-color:  #125ea6;
+            color:  #f1f1f1;
+        }    #T_1001e89a_09b2_11ea_a1c1_acde48001122row2_col3 {
+            background-color:  #084488;
+            color:  #f1f1f1;
+        }    #T_1001e89a_09b2_11ea_a1c1_acde48001122row3_col0 {
+            background-color:  #d5e5f4;
+            color:  #000000;
+        }    #T_1001e89a_09b2_11ea_a1c1_acde48001122row3_col1 {
+            background-color:  #f3f8fe;
+            color:  #000000;
+        }    #T_1001e89a_09b2_11ea_a1c1_acde48001122row3_col2 {
+            background-color:  #0a549e;
+            color:  #f1f1f1;
+        }    #T_1001e89a_09b2_11ea_a1c1_acde48001122row3_col3 {
+            background-color:  #08306b;
+            color:  #f1f1f1;
+        }</style><table id="T_1001e89a_09b2_11ea_a1c1_acde48001122" ><thead>    <tr>        <th class="blank" ></th>        <th class="index_name level0" >param_bootstrap</th>        <th class="col_heading level0 col0" colspan=2>False</th>        <th class="col_heading level0 col2" colspan=2>True</th>    </tr>    <tr>        <th class="blank" ></th>        <th class="index_name level1" >param_max_depth</th>        <th class="col_heading level1 col0" >10</th>        <th class="col_heading level1 col1" >50</th>        <th class="col_heading level1 col2" >10</th>        <th class="col_heading level1 col3" >50</th>    </tr>    <tr>        <th class="index_name level0" >param_max_features</th>        <th class="index_name level1" >param_n_estimators</th>        <th class="blank" ></th>        <th class="blank" ></th>        <th class="blank" ></th>        <th class="blank" ></th>    </tr></thead><tbody>
+                <tr>
+                        <th id="T_1001e89a_09b2_11ea_a1c1_acde48001122level0_row0" class="row_heading level0 row0" rowspan=2>2</th>
+                        <th id="T_1001e89a_09b2_11ea_a1c1_acde48001122level1_row0" class="row_heading level1 row0" >20</th>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row0_col0" class="data row0 col0" >-2.40387e+10</td>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row0_col1" class="data row0 col1" >-2.03703e+10</td>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row0_col2" class="data row0 col2" >-2.58438e+10</td>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row0_col3" class="data row0 col3" >-2.15188e+10</td>
+            </tr>
+            <tr>
+                                <th id="T_1001e89a_09b2_11ea_a1c1_acde48001122level1_row1" class="row_heading level1 row1" >40</th>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row1_col0" class="data row1 col0" >-2.38269e+10</td>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row1_col1" class="data row1 col1" >-1.94507e+10</td>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row1_col2" class="data row1 col2" >-2.47794e+10</td>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row1_col3" class="data row1 col3" >-2.05486e+10</td>
+            </tr>
+            <tr>
+                        <th id="T_1001e89a_09b2_11ea_a1c1_acde48001122level0_row2" class="row_heading level0 row2" rowspan=2>18</th>
+                        <th id="T_1001e89a_09b2_11ea_a1c1_acde48001122level1_row2" class="row_heading level1 row2" >20</th>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row2_col0" class="data row2 col0" >-2.75995e+10</td>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row2_col1" class="data row2 col1" >-2.98098e+10</td>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row2_col2" class="data row2 col2" >-1.91907e+10</td>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row2_col3" class="data row2 col3" >-1.78635e+10</td>
+            </tr>
+            <tr>
+                                <th id="T_1001e89a_09b2_11ea_a1c1_acde48001122level1_row3" class="row_heading level1 row3" >40</th>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row3_col0" class="data row3 col0" >-2.75696e+10</td>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row3_col1" class="data row3 col1" >-2.95399e+10</td>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row3_col2" class="data row3 col2" >-1.8679e+10</td>
+                        <td id="T_1001e89a_09b2_11ea_a1c1_acde48001122row3_col3" class="data row3 col3" >-1.68717e+10</td>
+            </tr>
+    </tbody></table>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">grid_search_forest</span><span class="o">.</span><span class="n">best_params_</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;bootstrap&#39;: True, &#39;max_depth&#39;: 50, &#39;max_features&#39;: 18, &#39;n_estimators&#39;: 40}</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">grid_search_forest</span><span class="o">.</span><span class="n">best_estimator_</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>RandomForestRegressor(bootstrap=True, criterion=&#39;mse&#39;, max_depth=50,
+                      max_features=18, max_leaf_nodes=None,
+                      min_impurity_decrease=0.0, min_impurity_split=None,
+                      min_samples_leaf=1, min_samples_split=2,
+                      min_weight_fraction_leaf=0.0, n_estimators=40,
+                      n_jobs=None, oob_score=False, random_state=None,
+                      verbose=0, warm_start=False)</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span> <span class="mi">40</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">max_features</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span>
+                             <span class="n">max_depth</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">bootstrap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">rmse</span><span class="p">,</span> <span class="n">r2_train</span><span class="p">,</span> <span class="n">ar2_train</span><span class="p">,</span> <span class="n">r2_test</span><span class="p">,</span> <span class="n">ar2_test</span><span class="p">,</span> <span class="n">cv</span> <span class="o">=</span> \
+    <span class="n">multiple_linear_regression</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span><span class="n">model</span><span class="p">,</span>
+                               <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+
+<span class="n">df_eval</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">df_eval</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Random Forest Regressor after grid search&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">rmse</span><span class="p">,</span><span class="n">r2_train</span><span class="p">,</span><span class="n">ar2_train</span><span class="p">,</span>
+                             <span class="n">r2_test</span><span class="p">,</span><span class="n">ar2_test</span><span class="p">,</span><span class="n">cv</span><span class="p">]</span>
+
+
+<span class="n">df_eval</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;Adjusted R-squared (test)&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Model</th>
+      <th>Details</th>
+      <th>Root Mean Squared Error (RMSE)</th>
+      <th>R-squared (training)</th>
+      <th>Adjusted R-squared (training)</th>
+      <th>R-squared (test)</th>
+      <th>Adjusted R-squared (test)</th>
+      <th>5-Fold Cross Validation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Random Forest Regressor after grid search</td>
+      <td></td>
+      <td>125118.269</td>
+      <td>0.981</td>
+      <td>0.981</td>
+      <td>0.884</td>
+      <td>0.883</td>
+      <td>0.872</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Randomized-search">Randomized search<a class="anchor-link" href="#Randomized-search"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="k">import</span> <span class="n">RandomizedSearchCV</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="k">import</span> <span class="n">pprint</span>
+
+<span class="c1"># Number of trees in  forest</span>
+<span class="n">n_estimators</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">stop</span> <span class="o">=</span> <span class="mi">200</span><span class="p">,</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)]</span>
+
+<span class="c1"># max features</span>
+<span class="n">max_features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="s1">&#39;sqrt&#39;</span><span class="p">]</span>
+
+<span class="c1"># max depth of leaves</span>
+<span class="n">max_depth</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="n">num</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)]</span>
+
+<span class="c1"># min samples split</span>
+<span class="n">min_samples_split</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+
+<span class="c1"># random grid</span>
+<span class="n">random_grid</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="n">n_estimators</span><span class="p">,</span>
+               <span class="s1">&#39;max_features&#39;</span><span class="p">:</span> <span class="n">max_features</span><span class="p">,</span>
+               <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="n">max_depth</span><span class="p">,</span>
+               <span class="s1">&#39;min_samples_split&#39;</span><span class="p">:</span> <span class="n">min_samples_split</span><span class="p">}</span>
+
+<span class="n">pprint</span><span class="p">(</span><span class="n">random_grid</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>{&#39;max_depth&#39;: [1, 23, 45],
+ &#39;max_features&#39;: [&#39;auto&#39;, &#39;sqrt&#39;],
+ &#39;min_samples_split&#39;: [5, 10],
+ &#39;n_estimators&#39;: [20, 65, 110, 155, 200]}
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rf_random</span> <span class="o">=</span> <span class="n">RandomizedSearchCV</span><span class="p">(</span><span class="n">estimator</span> <span class="o">=</span> <span class="n">model</span><span class="p">,</span>
+                               <span class="n">param_distributions</span> <span class="o">=</span> <span class="n">random_grid</span><span class="p">,</span>
+                               <span class="n">n_iter</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+                               <span class="n">cv</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
+                               <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                               <span class="n">random_state</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                               <span class="n">n_jobs</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                               <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_squared_error&#39;</span><span class="p">)</span>
+<span class="c1"># Fit the random search model</span>
+<span class="n">rf_random</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xtrain</span><span class="p">,</span> <span class="n">ytrain</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Fitting 5 folds for each of 10 candidates, totalling 50 fits
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>[Parallel(n_jobs=-1)]: Using backend LokyBackend with 4 concurrent workers.
+[Parallel(n_jobs=-1)]: Done  33 tasks      | elapsed:   31.7s
+[Parallel(n_jobs=-1)]: Done  50 out of  50 | elapsed:  1.1min finished
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>RandomizedSearchCV(cv=5, error_score=&#39;raise-deprecating&#39;,
+                   estimator=RandomForestRegressor(bootstrap=True,
+                                                   criterion=&#39;mse&#39;,
+                                                   max_depth=50,
+                                                   max_features=18,
+                                                   max_leaf_nodes=None,
+                                                   min_impurity_decrease=0.0,
+                                                   min_impurity_split=None,
+                                                   min_samples_leaf=1,
+                                                   min_samples_split=2,
+                                                   min_weight_fraction_leaf=0.0,
+                                                   n_estimators=40, n_jobs=None,
+                                                   oob_score=False,
+                                                   random_state=100, verbose=0,
+                                                   warm_start=False),
+                   iid=&#39;warn&#39;, n_iter=10, n_jobs=-1,
+                   param_distributions={&#39;max_depth&#39;: [1, 23, 45],
+                                        &#39;max_features&#39;: [&#39;auto&#39;, &#39;sqrt&#39;],
+                                        &#39;min_samples_split&#39;: [5, 10],
+                                        &#39;n_estimators&#39;: [20, 65, 110, 155,
+                                                         200]},
+                   pre_dispatch=&#39;2*n_jobs&#39;, random_state=100, refit=True,
+                   return_train_score=False, scoring=&#39;neg_mean_squared_error&#39;,
+                   verbose=2)</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rf_random</span><span class="o">.</span><span class="n">best_params_</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>{&#39;n_estimators&#39;: 155,
+ &#39;min_samples_split&#39;: 10,
+ &#39;max_features&#39;: &#39;auto&#39;,
+ &#39;max_depth&#39;: 23}</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span> <span class="mi">155</span><span class="p">,</span>
+                              <span class="n">random_state</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                              <span class="n">max_features</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span>
+                              <span class="n">max_depth</span><span class="o">=</span><span class="mi">23</span><span class="p">,</span>
+                              <span class="n">min_samples_split</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">rmse</span><span class="p">,</span> <span class="n">r2_train</span><span class="p">,</span> <span class="n">ar2_train</span><span class="p">,</span> <span class="n">r2_test</span><span class="p">,</span> <span class="n">ar2_test</span><span class="p">,</span> <span class="n">cv</span> <span class="o">=</span> \
+    <span class="n">multiple_linear_regression</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">features</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span><span class="n">model</span><span class="p">,</span>
+                               <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+
+<span class="n">df_eval</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">df_eval</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Random Forest Regressor after grid search&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">rmse</span><span class="p">,</span><span class="n">r2_train</span><span class="p">,</span><span class="n">ar2_train</span><span class="p">,</span>
+                             <span class="n">r2_test</span><span class="p">,</span><span class="n">ar2_test</span><span class="p">,</span><span class="n">cv</span><span class="p">]</span>
+
+
+<span class="n">df_eval</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;Adjusted R-squared (test)&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Feature-Importance">Feature Importance<a class="anchor-link" href="#Feature-Importance"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">importances</span> <span class="o">=</span> <span class="n">rf_random</span><span class="o">.</span><span class="n">best_estimator_</span><span class="o">.</span><span class="n">feature_importances_</span>
+<span class="n">importances</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_imp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;feature&#39;</span><span class="p">:</span> <span class="n">features</span><span class="p">,</span>
+                      <span class="s1">&#39;importance&#39;</span><span class="p">:</span> <span class="n">importances</span><span class="p">})</span>
+
+<span class="n">df_imp</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;importance&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>\
+  <span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">background_gradient</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;importance&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Feature-Importance-using-eli5">Feature Importance using eli5<a class="anchor-link" href="#Feature-Importance-using-eli5"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">eli5</span>
+<span class="kn">from</span> <span class="nn">eli5.sklearn</span> <span class="k">import</span> <span class="n">PermutationImportance</span>
+<span class="kn">from</span> <span class="nn">eli5</span> <span class="k">import</span> <span class="n">show_prediction</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">perm</span> <span class="o">=</span> <span class="n">PermutationImportance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Xtest</span><span class="p">,</span> <span class="n">ytest</span><span class="p">)</span>
+
+<span class="n">eli5</span><span class="o">.</span><span class="n">show_weights</span><span class="p">(</span><span class="n">perm</span><span class="p">,</span> <span class="n">feature_names</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">eli5</span><span class="o">.</span><span class="n">explain_weights_df</span><span class="p">(</span><span class="n">perm</span><span class="p">,</span> <span class="n">feature_names</span><span class="o">=</span><span class="n">features</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>\
+  <span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">background_gradient</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;weight&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">test</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">eli5</span><span class="o">.</span><span class="n">show_prediction</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">test</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">:],</span><span class="n">show_feature_values</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+ 
+
+
+    </main>
+    

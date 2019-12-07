@@ -27,4 +27,25 @@
 
 
 
+- url: d01_regression_modelling_using_pyspark
+- url: a02_regression_data_processing_script
+- url: c09_regression_modelling_boosting_xgb
+- url: c08_regression_modelling_sklearn_gbr
 - url: a01_regression_data_processing
+- url: c06_regression_modelling_sklearn_best_r2
+- url: c01_regression_modelling_linear_and_polynomial_sklearn
+- url: b04_regression_data_visualization_and_eda_pixiedust
+- url: c03_regression_modelling_sklearn_methods
+- url: c02_regression_modelling_linear_ols_statsmodels
+- url: c07_regression_modelling_select_kbest
+- url: b02_regression_data_visualization_and_eda_bokeh
+- url: b03_regression_data_visualization_and_eda_plotly
+- url: c11_regression_modelling_boosting_catboost
+- url: a03_regression_statistics
+- url: b01_regression_data_visualization_and_eda
+- url: c04_regression_modelling_random_forest
+- url: b05_regression_data_visualization_and_eda_with_pandas_profiling
+- url: c05_regression_modelling_random_forest_feature_importance
+- url: d02_regression_modelling_using_pyspark_random_forest_tuning
+- url: c10_regression_modelling_boosting_lgb
+- url: README

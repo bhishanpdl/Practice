@@ -1,0 +1,171 @@
+---
+redirect_from:
+  - "a02-regression-data-processing-script"
+interact_link: content/a02_regression_data_processing_script.ipynb
+kernel_name: datasc
+kernel_path: content
+has_widgets: false
+title: |-
+  A02 Regression Data Processing Script
+pagenum: 1
+prev_page:
+  url: /d01_regression_modelling_using_pyspark.html
+next_page:
+  url: /c09_regression_modelling_boosting_xgb.html
+suffix: .ipynb
+search: class div htable contentsspan tocskip span h tocul toc item ul
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">A02 Regression Data Processing Script</div>
+</div>
+    <div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><h1>Table of Contents<span class="tocSkip"></span></h1></p>
+<div class="toc"><ul class="toc-item"></ul></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%writefile</span> ../src/data/data_cleaning.py
+<span class="ch">#!/usr/bin/env python</span>
+
+<span class="vm">__doc__</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">Author: Bhishan Poudel</span>
+
+<span class="s2">Task: Clean the data of King County House price and create new features</span>
+
+<span class="s2">- input: ../data/raw/kc_house_data.csv</span>
+<span class="s2">- output: ../data/processed/data_cleaned_encoded.csv</span>
+
+<span class="s2">- Created date features age and age_after_renovation.</span>
+<span class="s2">- Created dummies for all categorical features</span>
+<span class="s2">- Created log tranform features for features with large values</span>
+<span class="s2">- Created new features like zipcode_houses (number of houses in that zipcode)</span>
+<span class="s2">&quot;&quot;&quot;</span>
+
+<span class="c1"># Imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># random state</span>
+<span class="n">random_state</span><span class="o">=</span><span class="mi">100</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span> <span class="c1"># we need this in each cell</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_state</span><span class="o">=</span><span class="n">random_state</span>
+
+
+<span class="c1"># Load the data</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/raw/kc_house_data.csv&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># Date time features</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;yr_sales&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;yr_sales&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;yr_built&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[[</span><span class="s1">&#39;yr_sales&#39;</span><span class="p">,</span><span class="s1">&#39;yr_built&#39;</span><span class="p">,</span><span class="s1">&#39;age&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;yr_renovated2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;yr_renovated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;yr_built&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;yr_renovated&#39;</span><span class="p">])</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;age_after_renovation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;yr_sales&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;yr_renovated2&#39;</span><span class="p">]</span>
+
+
+<span class="c1"># Categorical Features</span>
+<span class="n">cols_str</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;waterfront&#39;</span><span class="p">,</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;condition&#39;</span><span class="p">,</span> <span class="s1">&#39;grade&#39;</span><span class="p">,</span><span class="s1">&#39;zipcode&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols_str</span><span class="p">:</span>
+    <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+<span class="n">cols_obj</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">([</span><span class="s1">&#39;object&#39;</span><span class="p">,</span><span class="s1">&#39;category&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+<span class="n">cols_obj_small</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;waterfront&#39;</span><span class="p">,</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;condition&#39;</span><span class="p">,</span> <span class="s1">&#39;grade&#39;</span><span class="p">]</span>
+<span class="c1"># zipcode is related to house price, we may not want to drop it.</span>
+<span class="c1"># there are 70 unique zipcode values, it will create too many dummies.</span>
+<span class="c1"># one choice is taking top 5 or top 10 zipcodes </span>
+<span class="c1"># we can choose top 10 zipcodes with largest house price.</span>
+<span class="c1"># (or may be largest number of houses in that zipcode.)</span>
+<span class="n">most_expensive9_zipcodes</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;zipcode&#39;</span><span class="p">,</span><span class="s1">&#39;price&#39;</span><span class="p">]]</span>
+                           <span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">&#39;price&#39;</span><span class="p">,</span><span class="s1">&#39;zipcode&#39;</span><span class="p">])</span>
+                           <span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s1">&#39;zipcode&#39;</span><span class="p">,</span><span class="n">keep</span><span class="o">=</span><span class="s1">&#39;last&#39;</span><span class="p">)</span>
+                           <span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+                           <span class="o">.</span><span class="n">zipcode</span>
+                           <span class="o">.</span><span class="n">values</span>
+                          <span class="p">)</span>
+
+<span class="c1"># keep same zipcode for top 9 expensive and make all others as others</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;zipcode_top10&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;zipcode&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;zipcode_top10&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">most_expensive9_zipcodes</span><span class="p">),</span> <span class="s1">&#39;zipcode_top10&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;others&#39;</span>
+
+<span class="c1"># we can also create new feature number of houses in that zipcode</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;zipcode_houses&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;zipcode&#39;</span><span class="p">])[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s1">&#39;count&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># Boolean data types</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;basement_bool&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;sqft_basement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;renovation_bool&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;yr_renovated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+
+
+<span class="c1"># Numerical features binning</span>
+<span class="n">cols_bin</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span><span class="s1">&#39;age_after_renovation&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;age_cat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">],</span> <span class="mi">10</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;age_after_renovation_cat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;age_after_renovation&#39;</span><span class="p">],</span> <span class="mi">10</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="c1"># Create dummy variables from object and categories</span>
+<span class="n">cols_obj_cat</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">object</span><span class="p">,</span> <span class="s1">&#39;category&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">columns</span>
+<span class="n">cols_dummy</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;waterfront&#39;</span><span class="p">,</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;condition&#39;</span><span class="p">,</span> <span class="s1">&#39;grade&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;zipcode_top10&#39;</span><span class="p">,</span><span class="s1">&#39;age_cat&#39;</span><span class="p">,</span> <span class="s1">&#39;age_after_renovation_cat&#39;</span><span class="p">]</span>
+
+<span class="n">df_dummy</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">cols_dummy</span><span class="p">],</span><span class="n">drop_first</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">df_encoded</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span><span class="n">df_dummy</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="c1"># Log transformation of large numerical values</span>
+<span class="n">cols_log</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_living&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_lot&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_above&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;sqft_basement&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_living15&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_lot15&#39;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols_log</span><span class="p">:</span>
+    <span class="n">df_encoded</span><span class="p">[</span><span class="s1">&#39;log1p_&#39;</span> <span class="o">+</span> <span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+
+
+<span class="c1"># Drop unwanted columns</span>
+<span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Save clean data</span>
+<span class="n">df_encoded</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;../data/processed/data_cleaned_encoded.csv&#39;</span><span class="p">,</span>
+                  <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Writing ../src/data/data_cleaning.py
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+ 
+
+
+    </main>
+    

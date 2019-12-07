@@ -1,0 +1,3541 @@
+---
+redirect_from:
+  - "b01-regression-data-visualization-and-eda"
+interact_link: content/b01_regression_data_visualization_and_eda.ipynb
+kernel_name: datasc
+kernel_path: content
+has_widgets: false
+title: |-
+  B01 Regression Data Visualization And Eda
+pagenum: 15
+prev_page:
+  url: /a03_regression_statistics.html
+next_page:
+  url: /c04_regression_modelling_random_forest.html
+suffix: .ipynb
+search: toc span data class variables href modified id item lilispana analysis features categorical numnbspnbsp variate correlation num nbspnbsp discrete variable waterfront price sqftliving continuous description heatmap plots observation houses itemlispana imports load histogram univariate temporal li ul basementbool renovationbool box bi multi house prices names not should sqftabove strongly div spanul includes between bedrooms floors dtype sometimes less spread point biserial dichotomous correlated among related htable contentsspan tocskip h tocul spandata spanimports spanload spancorrelation spanhistogram spanunivariate spantemporal spandiscrete spancontinuous spancategorical spanwaterfront spanbasementbool spanrenovationbool spanbox spanbi spanmulti source www kaggle com harlfoxem housesalesprediction dataset contains sale king county seattle homes sold
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">B01 Regression Data Visualization And Eda</div>
+</div>
+    <div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><h1>Table of Contents<span class="tocSkip"></span></h1></p>
+<div class="toc"><ul class="toc-item"><li><span><a href="#Data-Description" data-toc-modified-id="Data-Description-1"><span class="toc-item-num">1&nbsp;&nbsp;</span>Data Description</a></span></li><li><span><a href="#Imports" data-toc-modified-id="Imports-2"><span class="toc-item-num">2&nbsp;&nbsp;</span>Imports</a></span></li><li><span><a href="#Load-the-data" data-toc-modified-id="Load-the-data-3"><span class="toc-item-num">3&nbsp;&nbsp;</span>Load the data</a></span></li><li><span><a href="#Correlation-heatmap" data-toc-modified-id="Correlation-heatmap-4"><span class="toc-item-num">4&nbsp;&nbsp;</span>Correlation heatmap</a></span></li><li><span><a href="#Histogram-of-all-features" data-toc-modified-id="Histogram-of-all-features-5"><span class="toc-item-num">5&nbsp;&nbsp;</span>Histogram of all features</a></span></li><li><span><a href="#Univariate-Analysis" data-toc-modified-id="Univariate-Analysis-6"><span class="toc-item-num">6&nbsp;&nbsp;</span>Univariate Analysis</a></span><ul class="toc-item"><li><span><a href="#Temporal-Variables" data-toc-modified-id="Temporal-Variables-6.1"><span class="toc-item-num">6.1&nbsp;&nbsp;</span>Temporal Variables</a></span></li><li><span><a href="#Discrete-Variables" data-toc-modified-id="Discrete-Variables-6.2"><span class="toc-item-num">6.2&nbsp;&nbsp;</span>Discrete Variables</a></span></li><li><span><a href="#Continuous-variables" data-toc-modified-id="Continuous-variables-6.3"><span class="toc-item-num">6.3&nbsp;&nbsp;</span>Continuous variables</a></span></li></ul></li><li><span><a href="#Categorical-variables" data-toc-modified-id="Categorical-variables-7"><span class="toc-item-num">7&nbsp;&nbsp;</span>Categorical variables</a></span><ul class="toc-item"><li><span><a href="#waterfront" data-toc-modified-id="waterfront-7.1"><span class="toc-item-num">7.1&nbsp;&nbsp;</span>waterfront</a></span></li><li><span><a href="#basement_bool" data-toc-modified-id="basement_bool-7.2"><span class="toc-item-num">7.2&nbsp;&nbsp;</span>basement_bool</a></span></li><li><span><a href="#renovation_bool" data-toc-modified-id="renovation_bool-7.3"><span class="toc-item-num">7.3&nbsp;&nbsp;</span>renovation_bool</a></span></li><li><span><a href="#box-plots-of-categorical-features" data-toc-modified-id="box-plots-of-categorical-features-7.4"><span class="toc-item-num">7.4&nbsp;&nbsp;</span>box plots of categorical features</a></span></li></ul></li><li><span><a href="#Bi-variate-Analysis" data-toc-modified-id="Bi-variate-Analysis-8"><span class="toc-item-num">8&nbsp;&nbsp;</span>Bi-variate Analysis</a></span></li><li><span><a href="#Multi-variate-Analysis" data-toc-modified-id="Multi-variate-Analysis-9"><span class="toc-item-num">9&nbsp;&nbsp;</span>Multi-variate Analysis</a></span></li></ul></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Data-Description">Data Description<a class="anchor-link" href="#Data-Description"> </a></h1><ul>
+<li>Data source: <a href="https://www.kaggle.com/harlfoxem/housesalesprediction">https://www.kaggle.com/harlfoxem/housesalesprediction</a></li>
+</ul>
+<p>This dataset contains house sale prices for King County, which includes Seattle.
+It includes homes sold between May 2014 and May 2015.</p>
+<p><img src="../data/raw/data_description.png" alt=""></p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Imports">Imports<a class="anchor-link" href="#Imports"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">bhishan.util_ds</span> <span class="k">import</span> <span class="n">get_column_descriptions</span>
+<span class="kn">from</span> <span class="nn">bhishan.util_viz</span> <span class="k">import</span> <span class="n">count_plot</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">color_codes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="c1"># random state</span>
+<span class="n">random_state</span><span class="o">=</span><span class="mi">100</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">random_state</span><span class="p">)</span> <span class="c1"># we need this in each cell</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">set_state</span><span class="o">=</span><span class="n">random_state</span>
+
+<span class="c1"># Jupyter notebook settings for pandas</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_columns&#39;</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.float_format&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{:,.2g}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">)</span> <span class="c1"># numbers sep by comma</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_rows&#39;</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span> <span class="c1"># None for all the rows</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;display.max_colwidth&#39;</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">IPython</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="k">import</span> <span class="n">display</span>
+
+<span class="nb">print</span><span class="p">([(</span><span class="n">x</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span><span class="n">x</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">np</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span><span class="n">sns</span><span class="p">,</span><span class="n">matplotlib</span><span class="p">]])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[(&#39;numpy&#39;, &#39;1.16.4&#39;), (&#39;pandas&#39;, &#39;0.25.0&#39;), (&#39;seaborn&#39;, &#39;0.9.0&#39;), (&#39;matplotlib&#39;, &#39;3.1.1&#39;)]
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">scipy</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">stats</span> <span class="c1"># pointbiserialr</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">linalg</span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%</span><span class="nx">javascript</span>
+<span class="nx">IPython</span><span class="p">.</span><span class="nx">OutputArea</span><span class="p">.</span><span class="nx">auto_scroll_threshold</span> <span class="o">=</span> <span class="mi">9999</span><span class="p">;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+
+<div id="fe2a9e09-be11-4dd5-81a6-001582f0477d"></div>
+<div class="output_subarea output_javascript ">
+<script type="text/javascript">
+var element = $('#fe2a9e09-be11-4dd5-81a6-001582f0477d');
+IPython.OutputArea.auto_scroll_threshold = 9999;
+</script>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Load-the-data">Load the data<a class="anchor-link" href="#Load-the-data"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/processed/data_cleaned_encoded.csv&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(21613, 92)
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>id</th>
+      <td>7129300520</td>
+      <td>6414100192</td>
+      <td>5631500400</td>
+      <td>2487200875</td>
+      <td>1954400510</td>
+    </tr>
+    <tr>
+      <th>date</th>
+      <td>2014-10-13</td>
+      <td>2014-12-09</td>
+      <td>2015-02-25</td>
+      <td>2014-12-09</td>
+      <td>2015-02-18</td>
+    </tr>
+    <tr>
+      <th>price</th>
+      <td>2.2e+05</td>
+      <td>5.4e+05</td>
+      <td>1.8e+05</td>
+      <td>6e+05</td>
+      <td>5.1e+05</td>
+    </tr>
+    <tr>
+      <th>bedrooms</th>
+      <td>3</td>
+      <td>3</td>
+      <td>2</td>
+      <td>4</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>bathrooms</th>
+      <td>1</td>
+      <td>2.2</td>
+      <td>1</td>
+      <td>3</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>sqft_living</th>
+      <td>1180</td>
+      <td>2570</td>
+      <td>770</td>
+      <td>1960</td>
+      <td>1680</td>
+    </tr>
+    <tr>
+      <th>sqft_lot</th>
+      <td>5650</td>
+      <td>7242</td>
+      <td>10000</td>
+      <td>5000</td>
+      <td>8080</td>
+    </tr>
+    <tr>
+      <th>floors</th>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>waterfront</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>view</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>condition</th>
+      <td>3</td>
+      <td>3</td>
+      <td>3</td>
+      <td>5</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>grade</th>
+      <td>7</td>
+      <td>7</td>
+      <td>6</td>
+      <td>7</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>sqft_above</th>
+      <td>1180</td>
+      <td>2170</td>
+      <td>770</td>
+      <td>1050</td>
+      <td>1680</td>
+    </tr>
+    <tr>
+      <th>sqft_basement</th>
+      <td>0</td>
+      <td>400</td>
+      <td>0</td>
+      <td>910</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>yr_built</th>
+      <td>1955</td>
+      <td>1951</td>
+      <td>1933</td>
+      <td>1965</td>
+      <td>1987</td>
+    </tr>
+    <tr>
+      <th>yr_renovated</th>
+      <td>0</td>
+      <td>1991</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>zipcode</th>
+      <td>98178</td>
+      <td>98125</td>
+      <td>98028</td>
+      <td>98136</td>
+      <td>98074</td>
+    </tr>
+    <tr>
+      <th>lat</th>
+      <td>48</td>
+      <td>48</td>
+      <td>48</td>
+      <td>48</td>
+      <td>48</td>
+    </tr>
+    <tr>
+      <th>long</th>
+      <td>-1.2e+02</td>
+      <td>-1.2e+02</td>
+      <td>-1.2e+02</td>
+      <td>-1.2e+02</td>
+      <td>-1.2e+02</td>
+    </tr>
+    <tr>
+      <th>sqft_living15</th>
+      <td>1340</td>
+      <td>1690</td>
+      <td>2720</td>
+      <td>1360</td>
+      <td>1800</td>
+    </tr>
+    <tr>
+      <th>sqft_lot15</th>
+      <td>5650</td>
+      <td>7639</td>
+      <td>8062</td>
+      <td>5000</td>
+      <td>7503</td>
+    </tr>
+    <tr>
+      <th>yr_sales</th>
+      <td>2014</td>
+      <td>2014</td>
+      <td>2015</td>
+      <td>2014</td>
+      <td>2015</td>
+    </tr>
+    <tr>
+      <th>age</th>
+      <td>59</td>
+      <td>63</td>
+      <td>82</td>
+      <td>49</td>
+      <td>28</td>
+    </tr>
+    <tr>
+      <th>yr_renovated2</th>
+      <td>1955</td>
+      <td>1991</td>
+      <td>1933</td>
+      <td>1965</td>
+      <td>1987</td>
+    </tr>
+    <tr>
+      <th>age_after_renovation</th>
+      <td>59</td>
+      <td>23</td>
+      <td>82</td>
+      <td>49</td>
+      <td>28</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>age_cat_2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>age_cat_3</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age_cat_4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age_cat_5</th>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age_cat_6</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age_cat_7</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age_cat_8</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age_cat_9</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age_after_renovation_cat_0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age_after_renovation_cat_1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age_after_renovation_cat_2</th>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>age_after_renovation_cat_3</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age_after_renovation_cat_4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age_after_renovation_cat_5</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age_after_renovation_cat_6</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age_after_renovation_cat_7</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age_after_renovation_cat_8</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>age_after_renovation_cat_9</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>log1p_price</th>
+      <td>12</td>
+      <td>13</td>
+      <td>12</td>
+      <td>13</td>
+      <td>13</td>
+    </tr>
+    <tr>
+      <th>log1p_sqft_living</th>
+      <td>7.1</td>
+      <td>7.9</td>
+      <td>6.6</td>
+      <td>7.6</td>
+      <td>7.4</td>
+    </tr>
+    <tr>
+      <th>log1p_sqft_lot</th>
+      <td>8.6</td>
+      <td>8.9</td>
+      <td>9.2</td>
+      <td>8.5</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>log1p_sqft_above</th>
+      <td>7.1</td>
+      <td>7.7</td>
+      <td>6.6</td>
+      <td>7</td>
+      <td>7.4</td>
+    </tr>
+    <tr>
+      <th>log1p_sqft_basement</th>
+      <td>0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>6.8</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>log1p_sqft_living15</th>
+      <td>7.2</td>
+      <td>7.4</td>
+      <td>7.9</td>
+      <td>7.2</td>
+      <td>7.5</td>
+    </tr>
+    <tr>
+      <th>log1p_sqft_lot15</th>
+      <td>8.6</td>
+      <td>8.9</td>
+      <td>9</td>
+      <td>8.5</td>
+      <td>8.9</td>
+    </tr>
+  </tbody>
+</table>
+<p>92 rows × 5 columns</p>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Correlation-heatmap">Correlation heatmap<a class="anchor-link" href="#Correlation-heatmap"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df_corr</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;pearson&#39;</span><span class="p">)</span>
+<span class="n">cols10</span> <span class="o">=</span> <span class="n">df_corr</span><span class="o">.</span><span class="n">nlargest</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;price&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">index</span>
+
+<span class="n">df_corr</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">cols10</span><span class="p">]</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+<span class="n">df_corr</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">background_gradient</span><span class="p">(</span><span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<style  type="text/css" >
+    #T_84c76d18_e779_11e9_bc40_acde48001122row0_col0 {
+            background-color:  #b40426;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row0_col1 {
+            background-color:  #f29072;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row0_col2 {
+            background-color:  #b7cff9;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row0_col3 {
+            background-color:  #9ebeff;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row0_col4 {
+            background-color:  #7597f6;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row0_col5 {
+            background-color:  #7093f3;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row0_col6 {
+            background-color:  #6282ea;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row0_col7 {
+            background-color:  #465ecf;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row0_col8 {
+            background-color:  #455cce;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row0_col9 {
+            background-color:  #3b4cc0;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row1_col0 {
+            background-color:  #f29072;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row1_col1 {
+            background-color:  #b40426;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row1_col2 {
+            background-color:  #b2ccfb;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row1_col3 {
+            background-color:  #b9d0f9;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row1_col4 {
+            background-color:  #a3c2fe;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row1_col5 {
+            background-color:  #6e90f2;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row1_col6 {
+            background-color:  #7a9df8;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row1_col7 {
+            background-color:  #7295f4;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row1_col8 {
+            background-color:  #6282ea;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row1_col9 {
+            background-color:  #4a63d3;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row2_col0 {
+            background-color:  #b7cff9;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row2_col1 {
+            background-color:  #b2ccfb;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row2_col2 {
+            background-color:  #b40426;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row2_col3 {
+            background-color:  #dddcdc;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row2_col4 {
+            background-color:  #d55042;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row2_col5 {
+            background-color:  #f59d7e;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row2_col6 {
+            background-color:  #d9dce1;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row2_col7 {
+            background-color:  #cbd8ee;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row2_col8 {
+            background-color:  #f7b79b;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row2_col9 {
+            background-color:  #d8dce2;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row3_col0 {
+            background-color:  #9ebeff;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row3_col1 {
+            background-color:  #b9d0f9;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row3_col2 {
+            background-color:  #dddcdc;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row3_col3 {
+            background-color:  #b40426;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row3_col4 {
+            background-color:  #d2dbe8;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row3_col5 {
+            background-color:  #d9dce1;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row3_col6 {
+            background-color:  #bfd3f6;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row3_col7 {
+            background-color:  #aec9fc;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row3_col8 {
+            background-color:  #d2dbe8;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row3_col9 {
+            background-color:  #9dbdff;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row4_col0 {
+            background-color:  #7597f6;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row4_col1 {
+            background-color:  #a3c2fe;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row4_col2 {
+            background-color:  #d55042;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row4_col3 {
+            background-color:  #d2dbe8;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row4_col4 {
+            background-color:  #b40426;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row4_col5 {
+            background-color:  #f6bea4;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row4_col6 {
+            background-color:  #cdd9ec;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row4_col7 {
+            background-color:  #d4dbe6;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row4_col8 {
+            background-color:  #f7a688;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row4_col9 {
+            background-color:  #dcdddd;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row5_col0 {
+            background-color:  #7093f3;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row5_col1 {
+            background-color:  #6e90f2;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row5_col2 {
+            background-color:  #f59d7e;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row5_col3 {
+            background-color:  #d9dce1;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row5_col4 {
+            background-color:  #f6bea4;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row5_col5 {
+            background-color:  #b40426;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row5_col6 {
+            background-color:  #cbd8ee;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row5_col7 {
+            background-color:  #b7cff9;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row5_col8 {
+            background-color:  #d0473d;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row5_col9 {
+            background-color:  #abc8fd;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row6_col0 {
+            background-color:  #6282ea;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row6_col1 {
+            background-color:  #7a9df8;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row6_col2 {
+            background-color:  #d9dce1;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row6_col3 {
+            background-color:  #bfd3f6;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row6_col4 {
+            background-color:  #cdd9ec;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row6_col5 {
+            background-color:  #cbd8ee;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row6_col6 {
+            background-color:  #b40426;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row6_col7 {
+            background-color:  #c53334;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row6_col8 {
+            background-color:  #c0d4f5;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row6_col9 {
+            background-color:  #5673e0;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row7_col0 {
+            background-color:  #465ecf;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row7_col1 {
+            background-color:  #7295f4;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row7_col2 {
+            background-color:  #cbd8ee;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row7_col3 {
+            background-color:  #aec9fc;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row7_col4 {
+            background-color:  #d4dbe6;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row7_col5 {
+            background-color:  #b7cff9;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row7_col6 {
+            background-color:  #c53334;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row7_col7 {
+            background-color:  #b40426;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row7_col8 {
+            background-color:  #bfd3f6;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row7_col9 {
+            background-color:  #5875e1;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row8_col0 {
+            background-color:  #455cce;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row8_col1 {
+            background-color:  #6282ea;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row8_col2 {
+            background-color:  #f7b79b;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row8_col3 {
+            background-color:  #d2dbe8;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row8_col4 {
+            background-color:  #f7a688;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row8_col5 {
+            background-color:  #d0473d;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row8_col6 {
+            background-color:  #c0d4f5;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row8_col7 {
+            background-color:  #bfd3f6;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row8_col8 {
+            background-color:  #b40426;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row8_col9 {
+            background-color:  #b2ccfb;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row9_col0 {
+            background-color:  #3b4cc0;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row9_col1 {
+            background-color:  #4a63d3;
+            color:  #f1f1f1;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row9_col2 {
+            background-color:  #d8dce2;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row9_col3 {
+            background-color:  #9dbdff;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row9_col4 {
+            background-color:  #dcdddd;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row9_col5 {
+            background-color:  #abc8fd;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row9_col6 {
+            background-color:  #5673e0;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row9_col7 {
+            background-color:  #5875e1;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row9_col8 {
+            background-color:  #b2ccfb;
+            color:  #000000;
+        }    #T_84c76d18_e779_11e9_bc40_acde48001122row9_col9 {
+            background-color:  #b40426;
+            color:  #f1f1f1;
+        }</style><table id="T_84c76d18_e779_11e9_bc40_acde48001122" ><thead>    <tr>        <th class="blank level0" ></th>        <th class="col_heading level0 col0" >price</th>        <th class="col_heading level0 col1" >log1p_price</th>        <th class="col_heading level0 col2" >sqft_living</th>        <th class="col_heading level0 col3" >grade</th>        <th class="col_heading level0 col4" >log1p_sqft_living</th>        <th class="col_heading level0 col5" >sqft_above</th>        <th class="col_heading level0 col6" >sqft_living15</th>        <th class="col_heading level0 col7" >log1p_sqft_living15</th>        <th class="col_heading level0 col8" >log1p_sqft_above</th>        <th class="col_heading level0 col9" >bathrooms</th>    </tr></thead><tbody>
+                <tr>
+                        <th id="T_84c76d18_e779_11e9_bc40_acde48001122level0_row0" class="row_heading level0 row0" >price</th>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row0_col0" class="data row0 col0" >1</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row0_col1" class="data row0 col1" >0.891654</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row0_col2" class="data row0 col2" >0.702035</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row0_col3" class="data row0 col3" >0.667434</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row0_col4" class="data row0 col4" >0.611757</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row0_col5" class="data row0 col5" >0.605567</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row0_col6" class="data row0 col6" >0.585379</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row0_col7" class="data row0 col7" >0.544014</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row0_col8" class="data row0 col8" >0.542774</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row0_col9" class="data row0 col9" >0.525138</td>
+            </tr>
+            <tr>
+                        <th id="T_84c76d18_e779_11e9_bc40_acde48001122level0_row1" class="row_heading level0 row1" >log1p_price</th>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row1_col0" class="data row1 col0" >0.891654</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row1_col1" class="data row1 col1" >1</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row1_col2" class="data row1 col2" >0.695341</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row1_col3" class="data row1 col3" >0.703634</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row1_col4" class="data row1 col4" >0.67494</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row1_col5" class="data row1 col5" >0.601802</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row1_col6" class="data row1 col6" >0.619312</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row1_col7" class="data row1 col7" >0.607201</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row1_col8" class="data row1 col8" >0.586322</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row1_col9" class="data row1 col9" >0.550802</td>
+            </tr>
+            <tr>
+                        <th id="T_84c76d18_e779_11e9_bc40_acde48001122level0_row2" class="row_heading level0 row2" >sqft_living</th>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row2_col0" class="data row2 col0" >0.702035</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row2_col1" class="data row2 col1" >0.695341</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row2_col2" class="data row2 col2" >1</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row2_col3" class="data row2 col3" >0.762704</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row2_col4" class="data row2 col4" >0.954368</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row2_col5" class="data row2 col5" >0.876597</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row2_col6" class="data row2 col6" >0.75642</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row2_col7" class="data row2 col7" >0.732194</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row2_col8" class="data row2 col8" >0.84324</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row2_col9" class="data row2 col9" >0.754665</td>
+            </tr>
+            <tr>
+                        <th id="T_84c76d18_e779_11e9_bc40_acde48001122level0_row3" class="row_heading level0 row3" >grade</th>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row3_col0" class="data row3 col0" >0.667434</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row3_col1" class="data row3 col1" >0.703634</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row3_col2" class="data row3 col2" >0.762704</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row3_col3" class="data row3 col3" >1</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row3_col4" class="data row3 col4" >0.743711</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row3_col5" class="data row3 col5" >0.755923</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row3_col6" class="data row3 col6" >0.713202</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row3_col7" class="data row3 col7" >0.688419</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row3_col8" class="data row3 col8" >0.743416</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row3_col9" class="data row3 col9" >0.664983</td>
+            </tr>
+            <tr>
+                        <th id="T_84c76d18_e779_11e9_bc40_acde48001122level0_row4" class="row_heading level0 row4" >log1p_sqft_living</th>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row4_col0" class="data row4 col0" >0.611757</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row4_col1" class="data row4 col1" >0.67494</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row4_col2" class="data row4 col2" >0.954368</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row4_col3" class="data row4 col3" >0.743711</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row4_col4" class="data row4 col4" >1</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row4_col5" class="data row4 col5" >0.832336</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row4_col6" class="data row4 col6" >0.736567</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row4_col7" class="data row4 col7" >0.746137</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row4_col8" class="data row4 col8" >0.865382</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row4_col9" class="data row4 col9" >0.761316</td>
+            </tr>
+            <tr>
+                        <th id="T_84c76d18_e779_11e9_bc40_acde48001122level0_row5" class="row_heading level0 row5" >sqft_above</th>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row5_col0" class="data row5 col0" >0.605567</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row5_col1" class="data row5 col1" >0.601802</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row5_col2" class="data row5 col2" >0.876597</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row5_col3" class="data row5 col3" >0.755923</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row5_col4" class="data row5 col4" >0.832336</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row5_col5" class="data row5 col5" >1</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row5_col6" class="data row5 col6" >0.73187</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row5_col7" class="data row5 col7" >0.701817</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row5_col8" class="data row5 col8" >0.962353</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row5_col9" class="data row5 col9" >0.685342</td>
+            </tr>
+            <tr>
+                        <th id="T_84c76d18_e779_11e9_bc40_acde48001122level0_row6" class="row_heading level0 row6" >sqft_living15</th>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row6_col0" class="data row6 col0" >0.585379</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row6_col1" class="data row6 col1" >0.619312</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row6_col2" class="data row6 col2" >0.75642</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row6_col3" class="data row6 col3" >0.713202</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row6_col4" class="data row6 col4" >0.736567</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row6_col5" class="data row6 col5" >0.73187</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row6_col6" class="data row6 col6" >1</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row6_col7" class="data row6 col7" >0.976821</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row6_col8" class="data row6 col8" >0.714572</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row6_col9" class="data row6 col9" >0.568634</td>
+            </tr>
+            <tr>
+                        <th id="T_84c76d18_e779_11e9_bc40_acde48001122level0_row7" class="row_heading level0 row7" >log1p_sqft_living15</th>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row7_col0" class="data row7 col0" >0.544014</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row7_col1" class="data row7 col1" >0.607201</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row7_col2" class="data row7 col2" >0.732194</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row7_col3" class="data row7 col3" >0.688419</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row7_col4" class="data row7 col4" >0.746137</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row7_col5" class="data row7 col5" >0.701817</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row7_col6" class="data row7 col6" >0.976821</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row7_col7" class="data row7 col7" >1</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row7_col8" class="data row7 col8" >0.712634</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row7_col9" class="data row7 col9" >0.570834</td>
+            </tr>
+            <tr>
+                        <th id="T_84c76d18_e779_11e9_bc40_acde48001122level0_row8" class="row_heading level0 row8" >log1p_sqft_above</th>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row8_col0" class="data row8 col0" >0.542774</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row8_col1" class="data row8 col1" >0.586322</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row8_col2" class="data row8 col2" >0.84324</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row8_col3" class="data row8 col3" >0.743416</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row8_col4" class="data row8 col4" >0.865382</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row8_col5" class="data row8 col5" >0.962353</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row8_col6" class="data row8 col6" >0.714572</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row8_col7" class="data row8 col7" >0.712634</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row8_col8" class="data row8 col8" >1</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row8_col9" class="data row8 col9" >0.694954</td>
+            </tr>
+            <tr>
+                        <th id="T_84c76d18_e779_11e9_bc40_acde48001122level0_row9" class="row_heading level0 row9" >bathrooms</th>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row9_col0" class="data row9 col0" >0.525138</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row9_col1" class="data row9 col1" >0.550802</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row9_col2" class="data row9 col2" >0.754665</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row9_col3" class="data row9 col3" >0.664983</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row9_col4" class="data row9 col4" >0.761316</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row9_col5" class="data row9 col5" >0.685342</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row9_col6" class="data row9 col6" >0.568634</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row9_col7" class="data row9 col7" >0.570834</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row9_col8" class="data row9 col8" >0.694954</td>
+                        <td id="T_84c76d18_e779_11e9_bc40_acde48001122row9_col9" class="data row9 col9" >1</td>
+            </tr>
+    </tbody></table>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">df_corr</span><span class="p">)</span>
+<span class="n">mask</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">triu_indices_from</span><span class="p">(</span><span class="n">mask</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">df_corr</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;.2f&#39;</span><span class="p">,</span><span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;../reports/figures/correlation_matrix.png&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_12_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Histogram-of-all-features">Histogram of all features<a class="anchor-link" href="#Histogram-of-all-features"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">features_raw_all</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="s1">&#39;bedrooms&#39;</span><span class="p">,</span> <span class="s1">&#39;bathrooms&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_living&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;sqft_lot&#39;</span><span class="p">,</span> <span class="s1">&#39;floors&#39;</span><span class="p">,</span> <span class="s1">&#39;waterfront&#39;</span><span class="p">,</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;condition&#39;</span><span class="p">,</span> <span class="s1">&#39;grade&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;sqft_above&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_basement&#39;</span><span class="p">,</span> <span class="s1">&#39;yr_built&#39;</span><span class="p">,</span> <span class="s1">&#39;yr_renovated&#39;</span><span class="p">,</span> <span class="s1">&#39;zipcode&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;long&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_living15&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_lot15&#39;</span><span class="p">]</span>
+
+<span class="n">df1</span><span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">features_raw_all</span><span class="p">]</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">bins</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">24</span><span class="p">,</span><span class="mi">24</span><span class="p">),</span><span class="n">xlabelsize</span><span class="o">=</span><span class="s1">&#39;20&#39;</span><span class="p">,</span><span class="n">ylabelsize</span><span class="o">=</span><span class="s1">&#39;20&#39;</span><span class="p">,</span><span class="n">xrot</span><span class="o">=-</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">set_size</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">h</span><span class="o">.</span><span class="n">ravel</span><span class="p">()];</span>
+<span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">tick_left</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">h</span><span class="o">.</span><span class="n">ravel</span><span class="p">()];</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;../reports/figures/histograms_of_all_features.png&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_14_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Univariate-Analysis">Univariate Analysis<a class="anchor-link" href="#Univariate-Analysis"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Temporal-Variables">Temporal Variables<a class="anchor-link" href="#Temporal-Variables"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s1">&#39;yr|price&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Index([&#39;price&#39;, &#39;yr_built&#39;, &#39;yr_renovated&#39;, &#39;yr_sales&#39;, &#39;yr_renovated2&#39;,
+       &#39;log1p_price&#39;],
+      dtype=&#39;object&#39;)</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;yr_sales&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="s1">&#39;median&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1209a15f8&gt;</pre>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_18_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;yr_built&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;price&#39;</span><span class="p">:</span> <span class="s1">&#39;median&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x120e65d30&gt;</pre>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_19_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;yr_built&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">2014</span><span class="p">][</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x123a3e668&gt;</pre>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_20_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;yr_sales&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;price&#39;</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x1252352e8&gt;</pre>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_21_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Discrete-Variables">Discrete Variables<a class="anchor-link" href="#Discrete-Variables"> </a></h2><p>Features that we can count like 1,2,3 are called discrete variables. For example</p>
+<h1 id="bedrooms,-#floors-and-so-on.">bedrooms, #floors and so on.<a class="anchor-link" href="#bedrooms,-#floors-and-so-on."> </a></h1><p>A simple check of discrete variable is look at number of unique labels and look
+at features having integer dtype. Sometimes features can have float dtype but
+still be a discrete variable.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">features_raw_all</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="s1">&#39;bedrooms&#39;</span><span class="p">,</span> <span class="s1">&#39;bathrooms&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_living&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;sqft_lot&#39;</span><span class="p">,</span> <span class="s1">&#39;floors&#39;</span><span class="p">,</span> <span class="s1">&#39;waterfront&#39;</span><span class="p">,</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span> <span class="s1">&#39;condition&#39;</span><span class="p">,</span> <span class="s1">&#39;grade&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;sqft_above&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_basement&#39;</span><span class="p">,</span> <span class="s1">&#39;yr_built&#39;</span><span class="p">,</span> <span class="s1">&#39;yr_renovated&#39;</span><span class="p">,</span> <span class="s1">&#39;zipcode&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;long&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_living15&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_lot15&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Index([&#39;id&#39;, &#39;date&#39;, &#39;price&#39;, &#39;bedrooms&#39;, &#39;bathrooms&#39;, &#39;sqft_living&#39;,
+       &#39;sqft_lot&#39;, &#39;floors&#39;, &#39;waterfront&#39;, &#39;view&#39;, &#39;condition&#39;, &#39;grade&#39;,
+       &#39;sqft_above&#39;, &#39;sqft_basement&#39;, &#39;yr_built&#39;, &#39;yr_renovated&#39;, &#39;zipcode&#39;,
+       &#39;lat&#39;, &#39;long&#39;, &#39;sqft_living15&#39;, &#39;sqft_lot15&#39;, &#39;yr_sales&#39;, &#39;age&#39;,
+       &#39;yr_renovated2&#39;, &#39;age_after_renovation&#39;, &#39;zipcode_top10&#39;,
+       &#39;zipcode_houses&#39;, &#39;basement_bool&#39;, &#39;renovation_bool&#39;, &#39;age_cat&#39;,
+       &#39;age_after_renovation_cat&#39;, &#39;waterfront_0&#39;, &#39;waterfront_1&#39;, &#39;view_0&#39;,
+       &#39;view_1&#39;, &#39;view_2&#39;, &#39;view_3&#39;, &#39;view_4&#39;, &#39;condition_1&#39;, &#39;condition_2&#39;,
+       &#39;condition_3&#39;, &#39;condition_4&#39;, &#39;condition_5&#39;, &#39;grade_1&#39;, &#39;grade_10&#39;,
+       &#39;grade_11&#39;, &#39;grade_12&#39;, &#39;grade_13&#39;, &#39;grade_3&#39;, &#39;grade_4&#39;, &#39;grade_5&#39;,
+       &#39;grade_6&#39;, &#39;grade_7&#39;, &#39;grade_8&#39;, &#39;grade_9&#39;, &#39;zipcode_top10_98004&#39;,
+       &#39;zipcode_top10_98006&#39;, &#39;zipcode_top10_98033&#39;, &#39;zipcode_top10_98039&#39;,
+       &#39;zipcode_top10_98040&#39;, &#39;zipcode_top10_98102&#39;, &#39;zipcode_top10_98105&#39;,
+       &#39;zipcode_top10_98155&#39;, &#39;zipcode_top10_98177&#39;, &#39;zipcode_top10_others&#39;,
+       &#39;age_cat_0&#39;, &#39;age_cat_1&#39;, &#39;age_cat_2&#39;, &#39;age_cat_3&#39;, &#39;age_cat_4&#39;,
+       &#39;age_cat_5&#39;, &#39;age_cat_6&#39;, &#39;age_cat_7&#39;, &#39;age_cat_8&#39;, &#39;age_cat_9&#39;,
+       &#39;age_after_renovation_cat_0&#39;, &#39;age_after_renovation_cat_1&#39;,
+       &#39;age_after_renovation_cat_2&#39;, &#39;age_after_renovation_cat_3&#39;,
+       &#39;age_after_renovation_cat_4&#39;, &#39;age_after_renovation_cat_5&#39;,
+       &#39;age_after_renovation_cat_6&#39;, &#39;age_after_renovation_cat_7&#39;,
+       &#39;age_after_renovation_cat_8&#39;, &#39;age_after_renovation_cat_9&#39;,
+       &#39;log1p_price&#39;, &#39;log1p_sqft_living&#39;, &#39;log1p_sqft_lot&#39;,
+       &#39;log1p_sqft_above&#39;, &#39;log1p_sqft_basement&#39;, &#39;log1p_sqft_living15&#39;,
+       &#39;log1p_sqft_lot15&#39;],
+      dtype=&#39;object&#39;)</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cols_num</span> <span class="o">=</span> <span class="p">[</span><span class="n">var</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">features_raw_all</span> <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">dtypes</span> <span class="o">!=</span> <span class="s1">&#39;O&#39;</span><span class="p">]</span>
+<span class="n">cols_time</span> <span class="o">=</span> <span class="p">[</span><span class="n">var</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">cols_num</span> <span class="k">if</span> <span class="s1">&#39;yr&#39;</span> <span class="ow">in</span> <span class="n">var</span> <span class="ow">or</span> <span class="s1">&#39;year&#39;</span> <span class="ow">in</span> <span class="n">var</span><span class="p">]</span>
+
+<span class="n">cols_discrete</span> <span class="o">=</span> <span class="p">[</span><span class="n">var</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">cols_num</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span><span class="o">&lt;</span><span class="mi">20</span> 
+                 <span class="ow">and</span> <span class="n">var</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">cols_time</span> <span class="o">+</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Number of discrete variables: &#39;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cols_discrete</span><span class="p">))</span>
+<span class="n">df</span><span class="p">[</span><span class="n">cols_discrete</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Number of discrete variables:  6
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>bedrooms</th>
+      <th>floors</th>
+      <th>waterfront</th>
+      <th>view</th>
+      <th>condition</th>
+      <th>grade</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>3</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>5</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>3</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>8</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cols_discrete</span><span class="p">:</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">order</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_25_0.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_25_1.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_25_2.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_25_3.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_25_4.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_25_5.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># sns.countplot(df.bedrooms, order = df[&#39;bedrooms&#39;].value_counts().index)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">bhishan.util_viz</span> <span class="k">import</span> <span class="n">count_plot</span>
+<span class="n">count_plot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;bedrooms&#39;</span><span class="p">,</span><span class="n">bottom</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">ofile</span><span class="o">=</span><span class="s1">&#39;../reports/figures/bedrooms_counts.png&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_27_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">count_plot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="s1">&#39;grade&#39;</span><span class="p">,</span><span class="n">bottom</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span><span class="n">ofile</span><span class="o">=</span><span class="s1">&#39;../reports/figures/grade_counts.png&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_28_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Continuous-variables">Continuous variables<a class="anchor-link" href="#Continuous-variables"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sqft_living&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>count   2.2e+04
+mean    2.1e+03
+std     9.2e+02
+min     2.9e+02
+25%     1.4e+03
+50%     1.9e+03
+75%     2.6e+03
+max     1.4e+04
+Name: sqft_living, dtype: float64</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="s1">&#39;sqft_living&#39;</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="p">,</span> <span class="n">bins</span> <span class="o">=</span> <span class="mi">5</span><span class="p">);</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_31_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Index([&#39;id&#39;, &#39;date&#39;, &#39;price&#39;, &#39;bedrooms&#39;, &#39;bathrooms&#39;, &#39;sqft_living&#39;,
+       &#39;sqft_lot&#39;, &#39;floors&#39;, &#39;waterfront&#39;, &#39;view&#39;, &#39;condition&#39;, &#39;grade&#39;,
+       &#39;sqft_above&#39;, &#39;sqft_basement&#39;, &#39;yr_built&#39;, &#39;yr_renovated&#39;, &#39;zipcode&#39;,
+       &#39;lat&#39;, &#39;long&#39;, &#39;sqft_living15&#39;, &#39;sqft_lot15&#39;, &#39;yr_sales&#39;, &#39;age&#39;,
+       &#39;yr_renovated2&#39;, &#39;age_after_renovation&#39;, &#39;zipcode_top10&#39;,
+       &#39;zipcode_houses&#39;, &#39;basement_bool&#39;, &#39;renovation_bool&#39;, &#39;age_cat&#39;,
+       &#39;age_after_renovation_cat&#39;, &#39;waterfront_0&#39;, &#39;waterfront_1&#39;, &#39;view_0&#39;,
+       &#39;view_1&#39;, &#39;view_2&#39;, &#39;view_3&#39;, &#39;view_4&#39;, &#39;condition_1&#39;, &#39;condition_2&#39;,
+       &#39;condition_3&#39;, &#39;condition_4&#39;, &#39;condition_5&#39;, &#39;grade_1&#39;, &#39;grade_10&#39;,
+       &#39;grade_11&#39;, &#39;grade_12&#39;, &#39;grade_13&#39;, &#39;grade_3&#39;, &#39;grade_4&#39;, &#39;grade_5&#39;,
+       &#39;grade_6&#39;, &#39;grade_7&#39;, &#39;grade_8&#39;, &#39;grade_9&#39;, &#39;zipcode_top10_98004&#39;,
+       &#39;zipcode_top10_98006&#39;, &#39;zipcode_top10_98033&#39;, &#39;zipcode_top10_98039&#39;,
+       &#39;zipcode_top10_98040&#39;, &#39;zipcode_top10_98102&#39;, &#39;zipcode_top10_98105&#39;,
+       &#39;zipcode_top10_98155&#39;, &#39;zipcode_top10_98177&#39;, &#39;zipcode_top10_others&#39;,
+       &#39;age_cat_0&#39;, &#39;age_cat_1&#39;, &#39;age_cat_2&#39;, &#39;age_cat_3&#39;, &#39;age_cat_4&#39;,
+       &#39;age_cat_5&#39;, &#39;age_cat_6&#39;, &#39;age_cat_7&#39;, &#39;age_cat_8&#39;, &#39;age_cat_9&#39;,
+       &#39;age_after_renovation_cat_0&#39;, &#39;age_after_renovation_cat_1&#39;,
+       &#39;age_after_renovation_cat_2&#39;, &#39;age_after_renovation_cat_3&#39;,
+       &#39;age_after_renovation_cat_4&#39;, &#39;age_after_renovation_cat_5&#39;,
+       &#39;age_after_renovation_cat_6&#39;, &#39;age_after_renovation_cat_7&#39;,
+       &#39;age_after_renovation_cat_8&#39;, &#39;age_after_renovation_cat_9&#39;,
+       &#39;log1p_price&#39;, &#39;log1p_sqft_living&#39;, &#39;log1p_sqft_lot&#39;,
+       &#39;log1p_sqft_above&#39;, &#39;log1p_sqft_basement&#39;, &#39;log1p_sqft_living15&#39;,
+       &#39;log1p_sqft_lot15&#39;],
+      dtype=&#39;object&#39;)</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cols_logs</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_living&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_lot&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;sqft_above&#39;</span><span class="p">,</span><span class="s1">&#39;sqft_basement&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_living15&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;sqft_lot15&#39;</span><span class="p">]</span>
+
+<span class="n">colors10_hex</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#b03060&#39;</span><span class="p">,</span><span class="s1">&#39;#ff0000&#39;</span><span class="p">,</span> <span class="s1">&#39;#ff00ff&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;#67ceab&#39;</span><span class="p">,</span> <span class="s1">&#39;#63c56c&#39;</span><span class="p">,</span> <span class="s1">&#39;#225e31&#39;</span><span class="p">,</span>
+                 <span class="s1">&#39;#29b6f6&#39;</span><span class="p">,</span> <span class="s1">&#39;#6495ed&#39;</span><span class="p">,</span><span class="s1">&#39;#00008b&#39;</span><span class="p">,</span> 
+                <span class="s1">&#39;#ffa500&#39;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cols_logs</span><span class="p">):</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span> 
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">distplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">hist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">norm_hist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kde_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="n">c</span><span class="p">},</span>
+                 <span class="n">color</span><span class="o">=</span><span class="n">colors10_hex</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="c1"># add another plot</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">distplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;log1p_&#39;</span><span class="o">+</span><span class="n">c</span><span class="p">],</span> <span class="n">hist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">norm_hist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kde_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;log1p_&quot;</span><span class="o">+</span><span class="n">c</span><span class="p">},</span>
+                 <span class="n">color</span><span class="o">=</span><span class="n">colors10_hex</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_33_0.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_33_1.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_33_2.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_33_3.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_33_4.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_33_5.png"
+>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_33_6.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">distplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sqft_living&#39;</span><span class="p">],</span> <span class="n">hist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+             <span class="n">norm_hist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kde_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;sqrt_living&quot;</span><span class="p">})</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">distplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sqft_living15&#39;</span><span class="p">],</span> <span class="n">hist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+              <span class="n">norm_hist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">kde_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;sqrt_living15&quot;</span><span class="p">})</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;../reports/figures/sqft_living_distplot.png&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_34_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Categorical-variables">Categorical variables<a class="anchor-link" href="#Categorical-variables"> </a></h1><p>Variables such as district names, country names, class names etc are categorical
+variables. Sometimes discrete variables like #bedrooms #floors can be treated
+as categorical variables.</p>
+<p>When a categorical variable has a class less than 1% of the data, this may
+cause overfitting and we may want to rename it to RARE and may also drop these rows.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="waterfront">waterfront<a class="anchor-link" href="#waterfront"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;waterfront&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0    21450
+1      163
+Name: waterfront, dtype: int64</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">ax0</span><span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s2">&quot;waterfront&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+
+<span class="c1"># add another plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">distplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sqft_living&#39;</span><span class="p">],</span> <span class="n">hist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+             <span class="n">norm_hist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kde_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;sqrt_living&quot;</span><span class="p">})</span>
+
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">distplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sqft_living15&#39;</span><span class="p">],</span> <span class="n">hist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+              <span class="n">norm_hist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">kde_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;sqrt_living15&quot;</span><span class="p">})</span>
+
+<span class="n">ax0</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+
+<span class="n">ax0</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;waterfront&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax0</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;count&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;count&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+
+
+<span class="c1"># plt.tight_layout()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_38_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># [ i for i in dir(ax0) if i[:3]==&#39;set&#39;]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;waterfront&#39;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="p">,</span><span class="n">width</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
+            <span class="n">orient</span> <span class="o">=</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="n">showmeans</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">fliersize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;waterfront&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;../reports/figures/waterfront_boxplots.png&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_40_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Calculate the correlation coefficient</span>
+<span class="n">r</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">pointbiserialr</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;waterfront&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">])</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;point biserial correlation r is </span><span class="si">{:.2f}</span><span class="s1"> with p = </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">p</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>point biserial correlation r is 0.27 with p = 0.00
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Observation</p>
+<ul>
+<li>Houses with no waterfront are less spread, their prices are similar.</li>
+<li>Houses with waterfront are widely spread, thier prices are diverse.</li>
+<li>Houses with waterfront have higher price (validated by +ve point-biserial coeff)</li>
+<li>There is little correlation between two waterfronts.</li>
+</ul>
+<p>We have not tested the assumptions of point-biserial correlation</p>
+<ul>
+<li>There should be no significant outliers in the two groups of the
+dichotomous variable in terms of the continuous variable.</li>
+<li>There should be homogeneity of variances.</li>
+<li>The continuous variable should be approximately normally distributed
+for each group of the dichotomous variable.</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="basement_bool">basement_bool<a class="anchor-link" href="#basement_bool"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;basement_bool&#39;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="p">,</span><span class="n">width</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
+            <span class="n">orient</span> <span class="o">=</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="n">showmeans</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">fliersize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;basement&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;../reports/figures/basement_boxplots.png&#39;</span><span class="p">)</span>
+
+<span class="n">r</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">pointbiserialr</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;basement_bool&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">])</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;point biserial correlation r is </span><span class="si">{:.2f}</span><span class="s1"> with p = </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">p</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>point biserial correlation r is 0.18 with p = 0.00
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_44_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="renovation_bool">renovation_bool<a class="anchor-link" href="#renovation_bool"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">8</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;renovation_bool&#39;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="p">,</span><span class="n">width</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">,</span>
+            <span class="n">orient</span> <span class="o">=</span> <span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="n">showmeans</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">fliersize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;renovation&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;../reports/figures/renovation_boxplots.png&#39;</span><span class="p">)</span>
+
+<span class="n">r</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">pointbiserialr</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;renovation_bool&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">])</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;point biserial correlation r is </span><span class="si">{:.2f}</span><span class="s1"> with p = </span><span class="si">{:.2f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="p">,</span><span class="n">p</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>point biserial correlation r is 0.13 with p = 0.00
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_46_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="box-plots-of-categorical-features">box plots of categorical features<a class="anchor-link" href="#box-plots-of-categorical-features"> </a></h2>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cols_cat</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bedrooms&#39;</span> <span class="p">,</span><span class="s1">&#39;bathrooms&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;floors&#39;</span><span class="p">,</span> <span class="s1">&#39;view&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;condition&#39;</span><span class="p">,</span><span class="s1">&#39;grade&#39;</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">14</span><span class="p">))</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bedrooms&#39;</span><span class="p">],</span><span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bathrooms&#39;</span><span class="p">],</span><span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;waterfront&#39;</span><span class="p">],</span><span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;view&#39;</span><span class="p">],</span><span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;condition&#39;</span><span class="p">],</span><span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;grade&#39;</span><span class="p">],</span><span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+
+
+<span class="n">sns</span><span class="o">.</span><span class="n">despine</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Bedrooms&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Price&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">tick_left</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">tick_right</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Bathrooms&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Price&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Waterfront&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Price&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">tick_left</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">tick_right</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;View&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Price&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Condition&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Price&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">tick_left</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_label_position</span><span class="p">(</span><span class="s2">&quot;right&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">tick_right</span><span class="p">()</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Grade&#39;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;Price&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;../reports/figures/categorical_features_boxplots.png&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_49_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Index([&#39;id&#39;, &#39;date&#39;, &#39;price&#39;, &#39;bedrooms&#39;, &#39;bathrooms&#39;, &#39;sqft_living&#39;,
+       &#39;sqft_lot&#39;, &#39;floors&#39;, &#39;waterfront&#39;, &#39;view&#39;, &#39;condition&#39;, &#39;grade&#39;,
+       &#39;sqft_above&#39;, &#39;sqft_basement&#39;, &#39;yr_built&#39;, &#39;yr_renovated&#39;, &#39;zipcode&#39;,
+       &#39;lat&#39;, &#39;long&#39;, &#39;sqft_living15&#39;, &#39;sqft_lot15&#39;, &#39;yr_sales&#39;, &#39;age&#39;,
+       &#39;yr_renovated2&#39;, &#39;age_after_renovation&#39;, &#39;zipcode_top10&#39;,
+       &#39;zipcode_houses&#39;, &#39;basement_bool&#39;, &#39;renovation_bool&#39;, &#39;age_cat&#39;,
+       &#39;age_after_renovation_cat&#39;, &#39;waterfront_0&#39;, &#39;waterfront_1&#39;, &#39;view_0&#39;,
+       &#39;view_1&#39;, &#39;view_2&#39;, &#39;view_3&#39;, &#39;view_4&#39;, &#39;condition_1&#39;, &#39;condition_2&#39;,
+       &#39;condition_3&#39;, &#39;condition_4&#39;, &#39;condition_5&#39;, &#39;grade_1&#39;, &#39;grade_10&#39;,
+       &#39;grade_11&#39;, &#39;grade_12&#39;, &#39;grade_13&#39;, &#39;grade_3&#39;, &#39;grade_4&#39;, &#39;grade_5&#39;,
+       &#39;grade_6&#39;, &#39;grade_7&#39;, &#39;grade_8&#39;, &#39;grade_9&#39;, &#39;zipcode_top10_98004&#39;,
+       &#39;zipcode_top10_98006&#39;, &#39;zipcode_top10_98033&#39;, &#39;zipcode_top10_98039&#39;,
+       &#39;zipcode_top10_98040&#39;, &#39;zipcode_top10_98102&#39;, &#39;zipcode_top10_98105&#39;,
+       &#39;zipcode_top10_98155&#39;, &#39;zipcode_top10_98177&#39;, &#39;zipcode_top10_others&#39;,
+       &#39;age_cat_0&#39;, &#39;age_cat_1&#39;, &#39;age_cat_2&#39;, &#39;age_cat_3&#39;, &#39;age_cat_4&#39;,
+       &#39;age_cat_5&#39;, &#39;age_cat_6&#39;, &#39;age_cat_7&#39;, &#39;age_cat_8&#39;, &#39;age_cat_9&#39;,
+       &#39;age_after_renovation_cat_0&#39;, &#39;age_after_renovation_cat_1&#39;,
+       &#39;age_after_renovation_cat_2&#39;, &#39;age_after_renovation_cat_3&#39;,
+       &#39;age_after_renovation_cat_4&#39;, &#39;age_after_renovation_cat_5&#39;,
+       &#39;age_after_renovation_cat_6&#39;, &#39;age_after_renovation_cat_7&#39;,
+       &#39;age_after_renovation_cat_8&#39;, &#39;age_after_renovation_cat_9&#39;,
+       &#39;log1p_price&#39;, &#39;log1p_sqft_living&#39;, &#39;log1p_sqft_lot&#39;,
+       &#39;log1p_sqft_above&#39;, &#39;log1p_sqft_basement&#39;, &#39;log1p_sqft_living15&#39;,
+       &#39;log1p_sqft_lot15&#39;],
+      dtype=&#39;object&#39;)</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bedrooms&#39;</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>SpearmanrResult(correlation=0.34465237095978885, pvalue=0.0)</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;floors&#39;</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>SpearmanrResult(correlation=0.32234655003563695, pvalue=0.0)</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;bedrooms&#39;</span><span class="p">,</span><span class="s1">&#39;floors&#39;</span><span class="p">,</span><span class="s1">&#39;view&#39;</span><span class="p">,</span><span class="s1">&#39;condition&#39;</span><span class="p">,</span><span class="s1">&#39;grade&#39;</span><span class="p">]]</span>
+ <span class="o">.</span><span class="n">corrwith</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">],</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;spearman&#39;</span><span class="p">)</span>
+ <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;spearmanr&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">rename_axis</span><span class="p">(</span><span class="s1">&#39;column&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>column</th>
+      <th>spearmanr</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>bedrooms</td>
+      <td>0.34</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>floors</td>
+      <td>0.32</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>view</td>
+      <td>0.29</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>condition</td>
+      <td>0.018</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>grade</td>
+      <td>0.66</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Bi-variate-Analysis">Bi-variate Analysis<a class="anchor-link" href="#Bi-variate-Analysis"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#006400&#39;</span><span class="p">,</span> <span class="s1">&#39;#00008b&#39;</span><span class="p">,</span> <span class="s1">&#39;#b03060&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;#ff0000&#39;</span><span class="p">,</span> <span class="s1">&#39;#ffff00&#39;</span><span class="p">,</span> <span class="s1">&#39;#00ff00&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;#00ffff&#39;</span><span class="p">,</span> <span class="s1">&#39;#ff00ff&#39;</span><span class="p">,</span> <span class="s1">&#39;#6495ed&#39;</span><span class="p">,</span> <span class="s1">&#39;#ffdead&#39;</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">18</span><span class="p">))</span>
+<span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;bedrooms&#39;</span><span class="p">])[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;floors&#39;</span><span class="p">])[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;view&#39;</span><span class="p">])[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;grade&#39;</span><span class="p">])[</span><span class="s1">&#39;price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;../reports/figures/categorical_variables_barh_plots.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_55_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">jointplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;sqft_living&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;price&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;reg&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;sqft_living&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;../reports/figures/sqft_living_vs_price_jointplot.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_56_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">bhishan.util_viz</span> <span class="k">import</span> <span class="n">colors</span>
+
+
+<span class="k">def</span> <span class="nf">multiple_jointplots_with_pearsonr</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span><span class="n">target</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">scipy</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">col</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">jointplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">target</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;reg&#39;</span><span class="p">,</span>
+                          <span class="n">height</span><span class="o">=</span><span class="mi">5</span> <span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">r</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">df</span><span class="p">[</span><span class="n">target</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="s2">&quot;pearsonr = </span><span class="si">{:.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="n">ha</span> <span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">,</span>
+                   <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">15</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">plt</span>
+
+<span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sqft_living&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_living15&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_above&#39;</span><span class="p">]</span>
+<span class="n">multiple_jointplots_with_pearsonr</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span><span class="s1">&#39;price&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;../reports/figures/multiple_jointplots_with_pearsonr.png&#39;</span><span class="p">,</span><span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_57_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Observation:</p>
+<ul>
+<li>sqft_living, sqft_above and sqft_living15 all are strongly correlated with
+price.</li>
+<li>Let's look their correlation among themselves.</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">bhishan.util_viz</span> <span class="k">import</span> <span class="n">corrplot_with_pearsonr</span>
+
+<span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sqft_living&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_living15&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_above&#39;</span><span class="p">]</span>
+<span class="n">corrplot_with_pearsonr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="n">cols</span><span class="p">,</span><span class="n">ofile</span><span class="o">=</span><span class="s1">&#39;../reports/figures/corrplot_with_pearsonr.png&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_59_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Observation</p>
+<ul>
+<li>There is strong relationship among 3 variables (r&gt;0.7).</li>
+<li>sqft_above = sqft_livng - sqft_basement.</li>
+<li>sqft_living15 is strongly related to price.</li>
+<li>sqft_living15 is strongly related to sqft_above.</li>
+<li>We do not know sqft_living15 is partially correlated with price or not.</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">bhishan.util_stats</span> <span class="k">import</span> <span class="n">partial_corr</span>
+
+<span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_living&#39;</span><span class="p">,</span> <span class="s1">&#39;sqft_living15&#39;</span><span class="p">]</span>
+<span class="n">partial_corr</span><span class="p">(</span><span class="n">df</span><span class="p">,</span><span class="n">cols</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>price</th>
+      <th>sqft_living</th>
+      <th>sqft_living15</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>price</th>
+      <td>1</td>
+      <td>0.48</td>
+      <td>0.063</td>
+    </tr>
+    <tr>
+      <th>sqft_living</th>
+      <td>0.48</td>
+      <td>1</td>
+      <td>0.78</td>
+    </tr>
+    <tr>
+      <th>sqft_living15</th>
+      <td>0.063</td>
+      <td>0.78</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;pearson&#39;</span><span class="p">)</span> <span class="c1"># full correlations.</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>price</th>
+      <th>sqft_living</th>
+      <th>sqft_living15</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>price</th>
+      <td>1</td>
+      <td>0.7</td>
+      <td>0.59</td>
+    </tr>
+    <tr>
+      <th>sqft_living</th>
+      <td>0.7</td>
+      <td>1</td>
+      <td>0.76</td>
+    </tr>
+    <tr>
+      <th>sqft_living15</th>
+      <td>0.59</td>
+      <td>0.76</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sqft_living&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(0.7020350546118002, 0.0)</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sqft_living15&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(0.585378903579568, 0.0)</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Observation</p>
+<ul>
+<li>Now we can see that sqft_living15 has almost no correlation with house price.</li>
+<li>This means average house size of surrounding houses has no effect on the sell price.</li>
+</ul>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Multi-variate-Analysis">Multi-variate Analysis<a class="anchor-link" href="#Multi-variate-Analysis"> </a></h1>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="k">import</span> <span class="n">Axes3D</span>
+
+<span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">19</span><span class="p">,</span><span class="mf">12.5</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;floors&#39;</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bedrooms&#39;</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bathrooms&#39;</span><span class="p">],</span><span class="n">c</span><span class="o">=</span><span class="s2">&quot;darkgreen&quot;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Floors&#39;</span><span class="p">,</span><span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Bedrooms&#39;</span><span class="p">,</span><span class="n">zlabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Bathrooms / Bedrooms&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">12</span><span class="p">])</span>
+
+<span class="n">ax</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;floors&#39;</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bedrooms&#39;</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sqft_living&#39;</span><span class="p">],</span><span class="n">c</span><span class="o">=</span><span class="s2">&quot;darkgreen&quot;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Floors&#39;</span><span class="p">,</span><span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Bedrooms&#39;</span><span class="p">,</span><span class="n">zlabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">sqft Living&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">12</span><span class="p">])</span>
+
+<span class="n">ax</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sqft_living&#39;</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sqft_lot&#39;</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bathrooms&#39;</span><span class="p">],</span><span class="n">c</span><span class="o">=</span><span class="s2">&quot;darkgreen&quot;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> sqft Living&#39;</span><span class="p">,</span><span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">sqft Lot&#39;</span><span class="p">,</span><span class="n">zlabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Bathrooms / Bedrooms&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">250000</span><span class="p">])</span>
+
+<span class="n">ax</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sqft_living&#39;</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;sqft_lot&#39;</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;bedrooms&#39;</span><span class="p">],</span><span class="n">c</span><span class="o">=</span><span class="s2">&quot;darkgreen&quot;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1"> sqft Living&#39;</span><span class="p">,</span><span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">sqft Lot&#39;</span><span class="p">,</span><span class="n">zlabel</span><span class="o">=</span><span class="s1">&#39;Bedrooms&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">250000</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_67_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">9.5</span><span class="p">,</span><span class="mf">6.25</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">=</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;3d&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;view&#39;</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;grade&#39;</span><span class="p">],</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;yr_built&#39;</span><span class="p">],</span><span class="n">c</span><span class="o">=</span><span class="s2">&quot;darkgreen&quot;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=.</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">View&#39;</span><span class="p">,</span><span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Grade&#39;</span><span class="p">,</span><span class="n">zlabel</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Year Built&#39;</span><span class="p">);</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_68_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;view&#39;</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;grade&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span><span class="n">hue</span><span class="o">=</span><span class="s1">&#39;yr_built&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;matplotlib.axes._subplots.AxesSubplot at 0x11d8829e8&gt;</pre>
+</div>
+
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="images/b01_regression_data_visualization_and_eda_69_1.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+ 
+
+
+    </main>
+    
