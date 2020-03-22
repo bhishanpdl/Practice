@@ -14,3 +14,6 @@ Where,
 fr = (sum_Fsb/sum_Fsd) / NUM_GALS
    = sum_of_pixels_fo_all_scaled_bulge / sum_of_pixels_fo_all_scaled_disk / NUM_GALS
 ```
+
+# resize image
+<img src="https://github.com/bhishanpdl/Tutorials_and_Lessons/blob/master/Tutorial_PySpark/images/pandas_vs_pyspark/multiple_cond.png" alt="alt text" width="400" height="400">
