@@ -24,9 +24,16 @@ fr = (sum_Fsb/sum_Fsd) / NUM_GALS
 <code style="white-space:nowrap;">Hello World, how is it going?</code>
 </details>
 
-<details>
-<summary>Toggle the code</summary>
+## collapsible markdown?
+
+<details><summary>CLICK ME</summary>
+<p>
+
+#### yes, even hidden code blocks!
+
 ```python
-print('This is example of toggle in markdown.')
+print("hello world!")
 ```
+
+</p>
 </details>
