@@ -17,3 +17,9 @@ fr = (sum_Fsb/sum_Fsd) / NUM_GALS
 
 # resize image
 <img src="https://github.com/bhishanpdl/Tutorials_and_Lessons/blob/master/Tutorial_PySpark/images/pandas_vs_pyspark/multiple_cond.png" alt="alt text" width="400" height="400">
+
+# Hide code
+<details>
+<summary>Summary text.</summary>
+<code style="white-space:nowrap;">Hello World, how is it going?</code>
+</details>
