@@ -23,3 +23,10 @@ fr = (sum_Fsb/sum_Fsd) / NUM_GALS
 <summary>Summary text.</summary>
 <code style="white-space:nowrap;">Hello World, how is it going?</code>
 </details>
+
+<details>
+<summary>Toggle the code</summary>
+```python
+print('This is example of toggle in markdown.')
+```
+</details>
