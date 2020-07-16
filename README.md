@@ -50,6 +50,8 @@ print("hello world!")
 ! text in orange
 # text in gray
 @@ text in purple (and bold)@@
+
+outside @@ text in purple (and bold)@@ outside
 ```
 
 ```diff
