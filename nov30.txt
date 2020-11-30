@@ -1,2 +1,2 @@
 This is a practice text.
-This is line two.
+This is line 2.
