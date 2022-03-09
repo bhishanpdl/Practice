@@ -1,0 +1,2 @@
+date: march 9, 2022
+purpose: testing git commands from windows powershell
