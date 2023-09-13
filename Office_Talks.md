@@ -21,3 +21,8 @@ Its' really not a big lift, its just a switch betwwen visual view, the biggest c
 We can work with switch, but we could talk with stakeholder, or try and check which looks better, then we can say the additional filter looks good.
 
 ```
+# AI
+```
+AI has the endless horizon.
+
+```
