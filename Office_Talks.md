@@ -26,3 +26,12 @@ We can work with switch, but we could talk with stakeholder, or try and check wh
 AI has the endless horizon.
 
 ```
+
+# Talks
+```
+Thats what I would like to build a bridge between data science team and consulting team using quote unquote Ask an Expert meetings.
+
+
+Given all the history we had together, ...
+
+```
