@@ -33,11 +33,13 @@ fr = (sum_Fsb/sum_Fsd) / NUM_GALS
 <code style="white-space:nowrap;">Hello World, how is it going?</code>
 </details>
 
+[Go to TOC :arrow_heading_up:](#toc)
 ## collapsible markdown?
 
 <details><summary>CLICK ME</summary>
 <p>
 
+[Go to TOC :arrow_heading_up:](#toc)
 #### yes, even hidden code blocks!
 
 ```python
@@ -47,6 +49,7 @@ print("hello world!")
 </p>
 </details>
 
+[Go to TOC :arrow_heading_up:](#toc)
 # Color in github
 - ![#f03c15](https://via.placeholder.com/15/f03c15/000000?text=+) `#f03c15`
 - ![#c5f015](https://via.placeholder.com/15/c5f015/000000?text=+) `#c5f015`
@@ -96,4 +99,4 @@ outside @@ text in purple (and bold)@@ outside
 </p>
 
 # Test
-[Go to Contents :arrow_heading_up:](#toc)
+[Go to TOC :arrow_heading_up:](#toc)
