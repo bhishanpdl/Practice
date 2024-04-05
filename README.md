@@ -1,3 +1,11 @@
+Table of Contents
+=================
+  * [Practice](#practice)
+  * [resize image](#resize-image)
+  * [Hide code](#hide-code)
+    * [collapsible markdown?](#collapsible-markdown?)
+  * [Color in github](#color-in-github)
+
 # Practice
 $$
 bf = \frac{F_b + F_d} {F_b * f_{ratb} + F_d * f_{ratd}} * f_{ratb}
@@ -86,3 +94,5 @@ outside @@ text in purple (and bold)@@ outside
 <a href="https://stackoverflow.com/users/5200329" target="blank"><img align="center" src="https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/stackoverflow.svg" alt="5200329" height="30" width="30" /></a>
 </p>
 
+# Test
+[Go to Contents :arrow_heading_up:](#table-of-contents)
