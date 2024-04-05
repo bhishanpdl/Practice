@@ -1,3 +1,4 @@
+<a id="toc"></a>
 Table of Contents
 =================
   * [Practice](#practice)
@@ -95,4 +96,4 @@ outside @@ text in purple (and bold)@@ outside
 </p>
 
 # Test
-[Go to Contents :arrow_heading_up:](#table-of-contents)
+[Go to Contents :arrow_heading_up:](#toc)
