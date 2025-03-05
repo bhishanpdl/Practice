@@ -1,0 +1,25 @@
+Files with invalid characters in their paths:
+"wordle/Resources/Data_Science/Model_Interpretation/Model_Evaluation/6 More Evaluation Metrics Data Scientists Should Be Familiar with \342\200\224 Lessons from A High-rank Kagglers\342\200\231 New Book.pdf"
+wordle/Resources/Data_Science/a00_ML_Algorithms/Algorithm_Selection/Which Machine Learning Algorithm To Choose For My Problem? | SAP Conversational AI Blog.html
+"wordle/Resources/Data_Science/a00_ML_Algorithms/Classification/Imbalanced_Classification/books/Learning from Imbalanced Data Sets-Springer International Publishing (2018 Alberto Fern\303\241ndez, Salvador Garc\303\255a, Mikel Galar, Ronaldo C. Prati, Bartosz Krawczyk, Francisco Herrera ).pdf"
+"wordle/Resources/Data_Science/a00_ML_Algorithms/Clustering_kMeans/2.3. Clustering \342\200\224 scikit-learn 0.24.2 documentation.pdf"
+"wordle/Resources/Data_Science/a00_ML_Algorithms/Decision_Tree/pdf/Post pruning decision trees with cost complexity pruning \342\200\224 scikit learn 0 24 1 documentation.pdf"
+"wordle/Resources/Data_Science/a00_ML_Algorithms/Dimension_Reduction/sklearn decomposition PCA \342\200\224 scikit learn 0 24 2 documentation.pdf"
+"wordle/Resources/Data_Science/a00_ML_Algorithms/Dimension_Reduction/sklearn discriminant_analysis LinearDiscriminantAnalysis \342\200\224 scikit learn 0 24 2 documentation.pdf"
+"wordle/Resources/Data_Science/a00_ML_Algorithms/Dimension_Reduction/sklearn manifold TSNE \342\200\224 scikit learn 0 24 2 documentation.pdf"
+"wordle/Resources/Data_Science/a00_ML_Algorithms/Dimension_Reduction/t SNE \342\200\223 Laurens van der Maaten.pdf"
+wordle/Resources/Data_Science/a00_ML_Algorithms/Ensembling_Blending_Stacking/Ensembling/Kaggle Ensembling Guide | MLWave.pdf
+"wordle/Resources/Data_Science/a00_ML_Algorithms/Ensembling_Blending_Stacking/html/Stacking and Blending \342\200\224 An Intuitive Explanation   by Steven Yu   Medium.pdf"
+wordle/Resources/Data_Science/a00_ML_Algorithms/Logistic_Regression/pdf/A Simple Interpretation of Logistic Regression Coefficients | by Dina Jankovic | Towards Data Science.pdf
+"wordle/Resources/Data_Science/a00_ML_Algorithms/Logistic_Regression/pdf/Interpret Logistic Regression Coefficients [For Beginners] \342\200\223 Quantifying Health.pdf"
+"wordle/Resources/Data_Science/a00_ML_Algorithms/PCA/html/Principal Component Regression vs Partial Least Squares Regression \342\200\224 scikit-learn 0.24.1 documentati.html"
+wordle/Resources/Data_Science/a00_ML_Algorithms/PCA/html/correlation - Should one remove highly correlated variables before doing PCA? - Cross Validated.html
+"wordle/Resources/Data_Science/a00_ML_Algorithms/PCA/pdf/A Complete Guide to Principal Component Analysis \342\200\224 PCA in Machine Learning _ by Ashutosh Tripathi _ Towards Data Science.pdf"
+wordle/Resources/Data_Science/a00_ML_Algorithms/XGBoost/html/XGBoost Parameters | XGBoost Parameter Tuning.html
+"wordle/Resources/Data_Science/a00_ML_Algorithms/XGBoost/html/XGBoost Parameters \342\200\224 xgboost 1.4.0-SNAPSHOT documentation.html"
+"wordle/Resources/Data_Science/a00_ML_Algorithms/kNN_kMeans/html/1 6  Nearest Neighbors \342\200\224 scikit learn 0 24 1 documentation.pdf"
+"wordle/Resources/Data_Science/a00_ML_Algorithms/kNN_kMeans/html/1.6. Nearest Neighbors \342\200\224 scikit-learn 0.24.1 documentation.html"
+wordle/Resources/Data_Science/a00_ML_Algorithms/kNN_kMeans/html/10 Reasons for loving Nearest Neighbors algorithm | Quantdare.html
+"wordle/Resources/Data_Science/a00_ML_Algorithms/kNN_kMeans/html/Elbow Method \342\200\224 Yellowbrick v1 3 post1 documentation.pdf"
+"wordle/Resources/Data_Science/a00_ML_Algorithms/kNN_kMeans/html/Elbow Method \342\200\224 Yellowbrick v1.3.post1 documentation.html"
+"wordle/Resources/Data_Science/a00_ML_Algorithms/zz_pdf/An executive\342\200\231s guide to AI.pdf"
