@@ -27,3 +27,11 @@ And there you go—a clear breakdown of how the annual cost of $12,167$ comes fr
 $$
      \frac{60}{300} = 0.2
 $$
+
+
+$$
+\frac{60}{300} = 0.2
+$$
+
+
+$\frac{60}{300} = 0.2$
