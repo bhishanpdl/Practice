@@ -11,7 +11,7 @@
 
 2. **Calculate the Cost per Night**:
    - If the two jobs overlap, the company incurs a $1,000 penalty.
-   - The probability of both jobs overlapping on a given night is ```math  0.2 \times 1 = 0.2  ```, as the events are independent.
+   - The probability of both jobs overlapping on a given night is $0.2 \times 1 = 0.2$, as the events are independent.
    - The expected cost per night is:
      ```math
 
