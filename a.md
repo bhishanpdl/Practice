@@ -8,6 +8,7 @@ Of course! Here's the step-by-step reasoning:
 
 $$
      \frac{60}{300} = 0.2
+
 $$
 
 2. **Calculate the Cost per Night**:
@@ -17,6 +18,7 @@ $$
 
 $$
      0.2 \times 1,000 = 200 \, \text{dollars.}
+
 $$
 
 3. **Calculate the Annual Cost**:
@@ -24,6 +26,7 @@ $$
 
 $$
      200 \times 365 = 73,000 \, \text{dollars.}
+
 $$
 
 And there you go—a clear breakdown of how the annual cost of $12,167$ comes from this computation!
