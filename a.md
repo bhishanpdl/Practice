@@ -7,7 +7,7 @@ Of course! Here's the step-by-step reasoning:
    - Since the first job occupies 60 minutes, the overlap probability is:
 
 $$
-     \frac{60}{300} = 0.2
+\frac{60}{300} = 0.2
 
 $$
 
