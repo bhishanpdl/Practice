@@ -24,3 +24,6 @@ Of course! Here's the step-by-step reasoning:
 ```
 
 And there you go—a clear breakdown of how the annual cost of $12,167$ comes from this computation!
+$$
+     \frac{60}{300} = 0.2
+$$
