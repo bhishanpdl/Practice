@@ -39,8 +39,7 @@ fr = (sum_Fsb/sum_Fsd) / NUM_GALS
 <details><summary>CLICK ME</summary>
 <p>
 
-[Go to TOC :arrow_heading_up:](#toc)
-#### yes, even hidden code blocks!
+Everything between tag 'p' is hidden.
 
 ```python
 print("hello world!")
