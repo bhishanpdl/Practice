@@ -27,7 +27,7 @@ fr = (sum_Fsb/sum_Fsd) / NUM_GALS
 # resize image
 <img src="https://github.com/bhishanpdl/Tutorials_and_Lessons/blob/master/Tutorial_PySpark/images/pandas_vs_pyspark/multiple_cond.png" alt="alt text" width="400" height="400">
 
-# Hide code using details
+# Hide code using <details> and <summary>
 <details>
  
 <summary>Code below is hidden</summary>
@@ -36,7 +36,7 @@ fr = (sum_Fsb/sum_Fsd) / NUM_GALS
 </details>
 
 [Go to TOC :arrow_heading_up:](#toc)
-## collapsible markdown using **details** with title using **summary**
+## collapsible markdown using <details> and <summary>
 
 <details><summary>Answer</summary>
 <p>
