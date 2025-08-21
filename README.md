@@ -101,3 +101,26 @@ outside @@ text in purple (and bold)@@ outside
 
 # Test
 [Go to TOC :arrow_heading_up:](#toc)
+
+# Mermaid Diagrams
+
+### **Decision Tree for Choosing the Right Statistical Test**
+
+```mermaid
+flowchart TD
+A[Goal: Compare Two Groups] --> B{Data Normal?<br>Shapiro-Wilk};
+B -- Yes --> C{Variances Equal?<br>Levene's Test};
+B -- No --> D[Use Non-Parametric<br>Mann-Whitney U Test];
+C -- Yes --> E[Use Standard<br>Independent T-Test];
+C -- No --> F[Use Robust Parametric<br>Welch's T-Test];
+
+G[Goal: Compare >2 Groups] --> H{Data Normal?};
+H -- Yes --> I{Variances Equal?};
+H -- No --> J[Use Non-Parametric<br>Kruskal-Wallis H Test];
+I -- Yes --> K[Use Standard<br>One-Way ANOVA];
+I -- No --> L[Use Robust Parametric<br>Welch's ANOVA];
+
+M[Goal: Paired Measurements<br>e.g., Pre-Post Treatment] --> N{Data Normal?};
+N -- Yes --> O[Use Paired T-Test];
+N -- No --> P[Use Non-Parametric<br>Wilcoxon Signed-Rank Test];
+```
